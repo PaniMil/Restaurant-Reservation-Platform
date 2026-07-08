@@ -4,12 +4,24 @@ import Home from "./pages/Home";
 import RestaurantDetails from "./pages/RestaurantDetails";
 import Navbar from "./components/Navbar";
 import Favorites from "./pages/Favorites";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useState } from "react";
+import { getCurrentUser } from "./services/auth";
+import Profile from "./pages/Profile";
+
 
 function App() {
+
+    const [user, setUser] = useState(getCurrentUser);
+
     return (
 
         <>
-            <Navbar />
+            <Navbar
+                user={user}
+                setUser={setUser}
+            />
             <Routes>
 
                 <Route
@@ -23,7 +35,28 @@ function App() {
                 />
                 <Route
                     path="/favorites"
-                    element={<Favorites />}
+                    element={
+                        <ProtectedRoute>
+
+                            <Favorites />
+
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/login"
+                    element={<Login setUser={setUser} />}
+                />
+
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+
+                            <Profile />
+
+                        </ProtectedRoute>
+                    }
                 />
 
             </Routes>
