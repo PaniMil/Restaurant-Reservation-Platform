@@ -36,12 +36,25 @@ function Navbar({ user, setUser }) {
                         Home
                     </Link>
 
-                    <Link
-                        to="/favorites"
-                        className="text-gray-700 hover:text-orange-600 transition"
-                    >
-                        Favorites
-                    </Link>
+                    {user?.role === "admin" ? (
+
+                        <Link
+                            to="/admin"
+                            className="text-gray-700 hover:text-orange-600 transition"
+                        >
+                            Dashboard
+                        </Link>
+
+                    ) : (
+
+                        <Link
+                            to="/favorites"
+                            className="text-gray-700 hover:text-orange-600 transition"
+                        >
+                            Favorites
+                        </Link>
+
+                    )}
 
                     {user ? (
 

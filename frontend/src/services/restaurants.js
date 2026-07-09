@@ -16,10 +16,7 @@ export function getRestaurants() {
     }
 
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(restaurantsData)
-    );
+    saveRestaurants(restaurantsData);
 
 
     return restaurantsData;
@@ -91,5 +88,16 @@ export function updateRestaurant(updatedRestaurant) {
 
 
     saveRestaurants(updatedRestaurants);
+
+}
+
+export function getRestaurantById(id) {
+
+    const restaurants = getRestaurants();
+
+
+    return restaurants.find(
+        (restaurant) => restaurant.id === Number(id)
+    );
 
 }

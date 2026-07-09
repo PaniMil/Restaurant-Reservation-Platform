@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import restaurants from "../data/restaurants";
+// import restaurants from "../data/restaurants";
+import { getRestaurants } from "../services/restaurants";
 import RestaurantCard from "../components/RestaurantCard";
 import { getFavorites, saveFavorites } from "../services/favorites";
 
 
 function Favorites() {
+
+    const restaurants = getRestaurants();
 
     const [favorites, setFavorites] = useState(getFavorites);
 

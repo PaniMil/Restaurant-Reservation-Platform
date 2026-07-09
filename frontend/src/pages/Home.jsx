@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
-import restaurants from "../data/restaurants";
-import {getFavorites, saveFavorites} from "../services/favorites";
+// import restaurants from "../data/restaurants";
+import { getRestaurants } from "../services/restaurants";
+import { getFavorites, saveFavorites } from "../services/favorites";
 
 function Home() {
 
@@ -22,6 +23,8 @@ function Home() {
 
     const [category, setCategory] = useState("All");
 
+    const [restaurants, setRestaurants] = useState(getRestaurants());
+
     const filteredRestaurants = restaurants.filter((r) =>
         r.name.toLowerCase().includes(search.toLowerCase())
     ).filter((r) => category === "All" ? true : r.category === category);
@@ -35,8 +38,8 @@ function Home() {
     };
 
     useEffect(() => {
-    saveFavorites(favorites);
-}, [favorites]);
+        saveFavorites(favorites);
+    }, [favorites]);
 
     return (
         <div className="min-h-screen bg-orange-50 flex flex-col items-center pt-20 px-10">

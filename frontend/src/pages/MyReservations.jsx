@@ -1,11 +1,14 @@
-import restaurants from "../data/restaurants";
+// import restaurants from "../data/restaurants";
 // import reservations from "../data/reservations";
+import { getRestaurants } from "../services/restaurants";
 import { getReservations, cancelReservation } from "../services/reservation";
 import { useState } from "react";
 import RatingModal from "../components/RatingModal";
 
 function MyReservations() {
 
+    const restaurants = getRestaurants();
+    
     const [reservations, setReservations] = useState(getReservations());
 
     const [selectedReservation, setSelectedReservation] = useState(null);

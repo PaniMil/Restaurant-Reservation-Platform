@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import restaurants from "../data/restaurants";
+// import restaurants from "../data/restaurants";
 // import reservations from "../data/reservations";
+import { getRestaurants } from "../services/restaurants";
 import { getReservations, addReservation } from "../services/reservation";// import { getReservations, saveReservations } from "../services/reservation";
 
 function Reservation() {
@@ -16,6 +17,8 @@ function Reservation() {
     const [guests, setGuests] = useState(2);
 
     const [request, setRequest] = useState("");
+
+    const restaurants = getRestaurants();
 
     const restaurant = restaurants.find(
         (restaurant) => restaurant.id === Number(id)

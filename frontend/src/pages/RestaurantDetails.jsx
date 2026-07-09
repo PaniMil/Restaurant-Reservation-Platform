@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import restaurants from "../data/restaurants";
+// import restaurants from "../data/restaurants";
+import { getRestaurants } from "../services/restaurants";
 import { Link } from "react-router-dom";
 import { getRatings } from "../services/rating";
 import { useState } from "react";
@@ -7,6 +8,8 @@ import { useState } from "react";
 function RestaurantDetails() {
 
     const { id } = useParams();
+
+    const restaurants = getRestaurants();
 
     const restaurant = restaurants.find(
         (r) => r.id === Number(id)
