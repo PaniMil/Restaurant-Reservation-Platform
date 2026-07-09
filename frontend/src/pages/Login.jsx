@@ -33,8 +33,15 @@ function Login({ setUser }) {
 
         setUser(user);
 
-        navigate("/");
+        if (user.role === "admin") {
 
+            navigate("/admin");
+
+        } else {
+
+            navigate("/");
+
+        }
     };
 
     return (

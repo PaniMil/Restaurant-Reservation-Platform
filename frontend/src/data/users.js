@@ -18,11 +18,14 @@ const users = [
         role: "user"
     },
     {
-        id: 1,
-        username: "admin",
-        password: "admin123",
-        role: "admin"
-    }
+    id: 4,
+    fullName: "Admin",
+    username: "admin",
+    email: "admin@gmail.com",
+    password: "admin123",
+    createdAt: "2026-07-09",
+    role: "admin"
+}
 ];
 
 export default users;

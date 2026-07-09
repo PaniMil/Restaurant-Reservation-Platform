@@ -12,10 +12,14 @@ import Profile from "./pages/Profile";
 import Reservation from "./pages/Reservation";
 import MyReservations from "./pages/MyReservations";
 import Register from "./pages/Register";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
+import ManageRestaurants from "./pages/ManageRestaurants";
+import AddRestaurant from "./pages/AddRestaurant";
 
 function App() {
 
-    const [user, setUser] = useState(getCurrentUser);
+    const [user, setUser] = useState(getCurrentUser());
 
     return (
 
@@ -80,6 +84,46 @@ function App() {
                 <Route
                     path="/reservations"
                     element={<MyReservations />}
+                />
+
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminRoute>
+                            <AdminDashboard />
+                        </AdminRoute>
+                    }
+                />
+
+                <Route
+
+                    path="/admin/restaurants"
+
+                    element={
+
+                        <AdminRoute>
+
+                            <ManageRestaurants />
+
+                        </AdminRoute>
+
+                    }
+
+                />
+                <Route
+
+                    path="/admin/restaurants/add"
+
+                    element={
+
+                        <AdminRoute>
+
+                            <AddRestaurant />
+
+                        </AdminRoute>
+
+                    }
+
                 />
 
             </Routes>

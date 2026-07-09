@@ -101,8 +101,7 @@ function RestaurantDetails() {
                         </h2>
 
                         <p className="mt-3 text-gray-600">
-                            {restaurant.openingHours}
-                        </p>
+                            {restaurant.openingTime} - {restaurant.closingTime}                        </p>
 
                     </div>
 
