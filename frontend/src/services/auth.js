@@ -14,3 +14,12 @@ export function login(user) {
 export function logout() {
     localStorage.removeItem("currentUser");
 }
+
+export function updateCurrentUser(user) {
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(user)
+    );
+
+}

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import users from "../data/users";
+// import users from "../data/users";
+import { getUsers } from "../services/users";
 import { login } from "../services/auth";
 
-function Login({setUser}) {
+function Login({ setUser }) {
 
     const [username, setUsername] = useState("");
 
@@ -12,6 +13,8 @@ function Login({setUser}) {
     const navigate = useNavigate();
 
     const handleLogin = () => {
+
+        const users = getUsers();
 
         const user = users.find(
             (user) =>
@@ -66,6 +69,23 @@ function Login({setUser}) {
                 >
                     Login
                 </button>
+                <p className="text-center text-blue-500 mt-6">
+
+                    Don't have an account?
+
+                    <span
+
+                        onClick={() => navigate("/register")}
+
+                        className="text-orange-500 cursor-pointer ml-2 hover:underline"
+
+                    >
+
+                        Register
+
+                    </span>
+
+                </p>
 
             </div>
 

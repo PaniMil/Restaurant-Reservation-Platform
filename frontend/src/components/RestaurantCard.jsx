@@ -6,7 +6,7 @@ function RestaurantCard({ id, name, category, city, tables, favorite, onFavorite
             <div className="relative">
 
                 <img
-                    src=""
+                    src="https://placehold.co/600x400?text=Restaurant"
                     alt="Restaurant"
                     className="w-full h-40 object-cover"
                 />

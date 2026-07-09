@@ -12,7 +12,14 @@ const restaurants = [
         description:
             "Traditional Italian restaurant with handmade pasta and wood-fired pizza.",
 
-        openingHours: "10:00 AM - 11:00 PM",
+        openingTime: "10:00",
+        closingTime: "23:00",
+
+        reservationInterval: 30,
+
+        minimumReservationMinutes: 30,
+
+        maximumReservationMinutes: 180,
     },
     {
         id: 2,
@@ -20,15 +27,21 @@ const restaurants = [
         category: "Cafe",
         city: "Tehran",
         tables: 50,
-               image: "",
+        image: "",
 
         rating: 4.8,
 
         description:
             "Traditional Italian restaurant with handmade pasta and wood-fired pizza.",
 
-        openingHours: "11:00 AM - 11:00 PM",
+        openingTime: "11:00",
+        closingTime: "23:00",
 
+        reservationInterval: 60,
+
+        minimumReservationMinutes: 60,
+
+        maximumReservationMinutes: 180,
     },
     {
         id: 3,
@@ -36,14 +49,21 @@ const restaurants = [
         category: "Healthy",
         city: "Rasht",
         tables: 50,
-               image: "",
+        image: "",
 
         rating: 4.8,
 
         description:
             "Traditional Italian restaurant with handmade pasta and wood-fired pizza.",
 
-        openingHours: "9:00 AM - 11:00 PM",
+        openingTime: "12:00",
+        closingTime: "23:00",
+
+        reservationInterval: 15,
+
+        minimumReservationMinutes: 30,
+
+        maximumReservationMinutes: 120,
 
     },
     {
@@ -52,14 +72,21 @@ const restaurants = [
         category: "Italian",
         city: "Tabriz",
         tables: 10,
-               image: "",
+        image: "",
 
         rating: 4.8,
 
         description:
             "Traditional Italian restaurant with handmade pasta and wood-fired pizza.",
 
-        openingHours: "10:00 AM - 11:00 PM",
+        openingTime: "10:00",
+        closingTime: "23:00",
+        
+        reservationInterval: 30,
+
+        minimumReservationMinutes: 30,
+
+        maximumReservationMinutes: 180,
 
     },
 ];

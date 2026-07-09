@@ -9,7 +9,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useState } from "react";
 import { getCurrentUser } from "./services/auth";
 import Profile from "./pages/Profile";
-
+import Reservation from "./pages/Reservation";
+import MyReservations from "./pages/MyReservations";
+import Register from "./pages/Register";
 
 function App() {
 
@@ -49,6 +51,11 @@ function App() {
                 />
 
                 <Route
+                    path="/register"
+                    element={<Register setUser={setUser} />}
+                />
+
+                <Route
                     path="/profile"
                     element={
                         <ProtectedRoute>
@@ -57,6 +64,22 @@ function App() {
 
                         </ProtectedRoute>
                     }
+                />
+
+                <Route
+                    path="/restaurant/:id/reserve"
+                    element={
+                        <ProtectedRoute>
+
+                            <Reservation />
+
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/reservations"
+                    element={<MyReservations />}
                 />
 
             </Routes>
