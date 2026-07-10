@@ -16,6 +16,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import ManageRestaurants from "./pages/ManageRestaurants";
 import AddRestaurant from "./pages/AddRestaurant";
+import ManageUsers from "./pages/ManageUsers";
+import ReservationManagement from "./pages/ReservationManagement";
 
 function App() {
 
@@ -124,6 +126,24 @@ function App() {
 
                     }
 
+                />
+
+                <Route
+                    path="/admin/users"
+                    element={
+                        <AdminRoute>
+                            <ManageUsers />
+                        </AdminRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/reservations"
+                    element={
+                        <AdminRoute>
+                            <ReservationManagement />
+                        </AdminRoute>
+                    }
                 />
 
             </Routes>

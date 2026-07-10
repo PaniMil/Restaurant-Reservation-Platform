@@ -28,6 +28,20 @@ export function saveUsers(users) {
 
 }
 
+export function deleteUser(id) {
+
+    const users = getUsers();
+
+
+    const updatedUsers = users.filter(
+        (user) => user.id !== id
+    );
+
+
+    saveUsers(updatedUsers);
+
+}
+
 export function addUser(user) {
 
     const users = getUsers();

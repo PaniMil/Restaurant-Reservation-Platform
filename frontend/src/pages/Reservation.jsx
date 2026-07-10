@@ -4,6 +4,7 @@ import { useState } from "react";
 // import reservations from "../data/reservations";
 import { getRestaurants } from "../services/restaurants";
 import { getReservations, addReservation } from "../services/reservation";// import { getReservations, saveReservations } from "../services/reservation";
+import { getCurrentUser } from "../services/auth";
 
 function Reservation() {
 
@@ -19,6 +20,8 @@ function Reservation() {
     const [request, setRequest] = useState("");
 
     const restaurants = getRestaurants();
+
+    const currentUser = getCurrentUser();
 
     const restaurant = restaurants.find(
         (restaurant) => restaurant.id === Number(id)
@@ -183,6 +186,10 @@ function Reservation() {
             id: Date.now(),
 
             restaurantId: restaurant.id,
+
+            userId: currentUser.id,
+
+            username: currentUser.username,
 
             date: date,
 

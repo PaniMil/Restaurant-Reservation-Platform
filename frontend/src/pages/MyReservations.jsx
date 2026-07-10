@@ -4,11 +4,12 @@ import { getRestaurants } from "../services/restaurants";
 import { getReservations, cancelReservation } from "../services/reservation";
 import { useState } from "react";
 import RatingModal from "../components/RatingModal";
+import ReservationCard from "../components/ReservationCard";
 
 function MyReservations() {
 
     const restaurants = getRestaurants();
-    
+
     const [reservations, setReservations] = useState(getReservations());
 
     const [selectedReservation, setSelectedReservation] = useState(null);
@@ -111,107 +112,45 @@ function MyReservations() {
 
                             return (
 
-                                <div
+                                <ReservationCard
                                     key={reservation.id}
-                                    className="bg-white rounded-xl shadow-md p-6"
+                                    reservation={reservation}
+                                    restaurant={restaurant}
+                                    status={status}
+                                    statusColor={statusColor}
                                 >
 
-                                    <div className="flex justify-between items-start">
+                                    {status === "Upcoming" && (
 
-                                        <div>
+                                        <button
+                                            onClick={() => handleCancel(reservation.id)}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
+                                        >
+                                            Cancel Reservation
+                                        </button>
 
-                                            <h2 className="text-2xl font-semibold">
+                                    )}
 
-                                                {restaurant.name}
+                                    {status === "Completed" && (
 
-                                            </h2>
+                                        <button
+                                            onClick={() => openRating(reservation)}
+                                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg transition"
+                                        >
+                                            ⭐ Rate Restaurant
+                                        </button>
 
-                                            <div
-                                                className={`inline-block mt-3 px-4 py-1 rounded-full text-sm font-semibold ${statusColor}`}
-                                            >
+                                    )}
 
-                                                {status}
+                                    {status === "Cancelled" && (
 
-                                            </div>
+                                        <p className="text-red-600 font-semibold">
+                                            Reservation Cancelled
+                                        </p>
 
-                                            <p className="text-gray-600 mt-2">
+                                    )}
 
-                                                📅 {reservation.date}
-
-                                            </p>
-
-                                            <p className="text-gray-600">
-
-                                                🕒 {reservation.startTime} - {reservation.endTime}
-
-                                            </p>
-
-                                            <p className="text-gray-600">
-
-                                                👥 {reservation.guests} Guests
-
-                                            </p>
-
-                                            {reservation.request && (
-
-                                                <p className="text-gray-600">
-
-                                                    📝 {reservation.request}
-
-                                                </p>
-
-                                            )}
-
-                                        </div>
-                                        <div>
-
-                                            {status === "Upcoming" && (
-
-                                                <button
-
-                                                    onClick={() => handleCancel(reservation.id)}
-
-                                                    className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
-
-                                                >
-
-                                                    Cancel Reservation
-
-                                                </button>
-
-                                            )}
-
-                                            {status === "Completed" && (
-
-                                                <button
-
-                                                    onClick={() => openRating(reservation)}
-
-                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg transition"
-
-                                                >
-
-                                                    ⭐ Rate Restaurant
-
-                                                </button>
-
-                                            )}
-
-                                            {status === "Cancelled" && (
-
-                                                <p className="text-red-600 font-semibold">
-
-                                                    Reservation Cancelled
-
-                                                </p>
-
-                                            )}
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                                </ReservationCard>
 
                             );
 

@@ -4,6 +4,11 @@ const reservations = [
         id: 1,
         restaurantId: 1,
 
+        userId: 1,
+
+        username: "PaniMil",
+
+
         date: "2026-07-09",
 
         startTime: "13:00",
@@ -17,8 +22,12 @@ const reservations = [
     },
 
     {
-        id:2,
+        id: 2,
         restaurantId: 1,
+
+        userId: 2,
+
+        username: "BarMil",
 
         date: "2026-07-09",
 
@@ -32,7 +41,7 @@ const reservations = [
     },
 
     {
-        id:3,
+        id: 3,
         restaurantId: 2,
 
         date: "2026-07-10",
