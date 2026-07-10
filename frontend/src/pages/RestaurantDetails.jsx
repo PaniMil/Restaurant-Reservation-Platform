@@ -4,8 +4,11 @@ import { getRestaurants } from "../services/restaurants";
 import { Link } from "react-router-dom";
 import { getRatings } from "../services/rating";
 import { useState } from "react";
+import { getCurrentUser } from "../services/auth";
 
 function RestaurantDetails() {
+
+    const user = getCurrentUser();
 
     const { id } = useParams();
 
@@ -163,12 +166,14 @@ function RestaurantDetails() {
 
                     </div>
 
+                        {user?.role !== "admin" && (
                     <Link
                         to={`/restaurant/${restaurant.id}/reserve`}
                         className="block mt-10 w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-4 rounded-lg transition duration-300"
                     >
                         Reserve Table
                     </Link>
+                    )}
 
                 </div>
 

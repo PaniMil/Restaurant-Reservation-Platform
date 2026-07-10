@@ -26,3 +26,20 @@ export function addRating(rating){
     );
 
 }
+
+export function deleteRating(id) {
+
+    const ratings = getRatings();
+
+    const updatedRatings = ratings.filter((rating) => {
+
+        return rating.id !== id;
+
+    });
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(updatedRatings)
+    );
+
+}

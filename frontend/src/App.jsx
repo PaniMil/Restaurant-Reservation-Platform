@@ -18,6 +18,7 @@ import ManageRestaurants from "./pages/ManageRestaurants";
 import AddRestaurant from "./pages/AddRestaurant";
 import ManageUsers from "./pages/ManageUsers";
 import ReservationManagement from "./pages/ReservationManagement";
+import ReviewManagement from "./pages/ReviewManagement";
 
 function App() {
 
@@ -145,6 +146,22 @@ function App() {
                         </AdminRoute>
                     }
                 />
+
+                <Route
+
+    path="/admin/reviews"
+
+    element={
+
+        <AdminRoute>
+
+            <ReviewManagement />
+
+        </AdminRoute>
+
+    }
+
+/>
 
             </Routes>
         </>

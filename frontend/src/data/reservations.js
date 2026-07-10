@@ -17,7 +17,9 @@ const reservations = [
 
         guests: 4,
         request: "",
-        cancelled: false
+        cancelled: false,
+        rating: 5,
+            comment: "Excellent food!"
 
     },
 
@@ -37,7 +39,9 @@ const reservations = [
 
         guests: 4,
         request: "",
-        cancelled: false
+        cancelled: false,
+        rating: 4,
+            comment: "good!"
     },
 
     {
@@ -52,7 +56,9 @@ const reservations = [
 
         guests: 4,
         request: "",
-        cancelled: false
+        cancelled: false,
+        rating: 3,
+            comment: "not bad!"
     }
 
 ];
