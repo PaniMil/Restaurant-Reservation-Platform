@@ -68,7 +68,8 @@ export async function createReservation(req, res) {
         console.error(error);
 
         res.status(500).json({
-            message: "Failed to create reservation"
+            // message: "Failed to create reservation"
+            message: error.message
         });
 
     }
