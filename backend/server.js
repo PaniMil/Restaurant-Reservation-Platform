@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import restaurantRoutes from "./modules/restaurants/RestaurantsRoutes.js";
 import usersRoutes from "./modules/users/UsersRoutes.js";
+import reservationsRoutes from "./modules/reservations/ReservationsRoutes.js";
+import reservationRoutes from "./modules/reservations/ReservationsRoutes.js";
 // import sql from "./config/db.js";
 
 dotenv.config();
@@ -18,6 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/restaurants", restaurantRoutes);
 
 app.use("/api/users", usersRoutes);
+
+app.use("/api/reservations", reservationsRoutes);
+
+app.use("/api/reservations", reservationRoutes);
 
 app.get("/", (req, res) => {
     res.send("TableTime API is running...");
