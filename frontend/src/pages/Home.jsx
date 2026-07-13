@@ -23,7 +23,7 @@ function Home() {
 
     const [category, setCategory] = useState("All");
 
-    const [restaurants, setRestaurants] = useState(getRestaurants());
+    const [restaurants, setRestaurants] = useState([]);
 
     const filteredRestaurants = restaurants.filter((r) =>
         r.name.toLowerCase().includes(search.toLowerCase())
@@ -36,6 +36,30 @@ function Home() {
             setFavorites([...favorites, id]);
         }
     };
+
+    useEffect(() => {
+
+        async function loadRestaurants() {
+
+            try {
+
+                const data = await getRestaurants();
+
+                setRestaurants(data);
+
+            }
+
+            catch (err) {
+
+                console.log(err);
+
+            }
+
+        }
+
+        loadRestaurants();
+
+    }, []);
 
     useEffect(() => {
         saveFavorites(favorites);

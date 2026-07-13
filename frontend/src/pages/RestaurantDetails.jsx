@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
 // import restaurants from "../data/restaurants";
-import { getRestaurants } from "../services/restaurants";
+import { getRestaurantById } from "../services/restaurants";
 import { Link } from "react-router-dom";
 import { getRatings } from "../services/rating";
-import { useState } from "react";
 import { getCurrentUser } from "../services/auth";
+import { useEffect, useState } from "react";
 
 function RestaurantDetails() {
 
@@ -12,20 +12,45 @@ function RestaurantDetails() {
 
     const { id } = useParams();
 
-    const restaurants = getRestaurants();
+    const [restaurant, setRestaurant] = useState(null);
 
-    const restaurant = restaurants.find(
-        (r) => r.id === Number(id)
-    )
+    const [ratings, setRatings] = useState([]);
 
-    const ratings = getRatings();
+    useEffect(() => {
 
+        async function loadRestaurant() {
 
-    const restaurantRatings = ratings.filter(
-        (rating) =>
-            rating.restaurantId === restaurant.id
-    );
+            try {
 
+                const data = await getRestaurantById(id);
+
+                setRestaurant(data);
+
+                const ratingsData =
+                    await getRatings(id);
+
+                setRatings(ratingsData);
+
+            }
+
+            catch (err) {
+
+                console.log(err);
+
+            }
+
+        }
+
+        loadRestaurant();
+
+    }, [id]);
+
+    if (!restaurant) {
+
+        return <h1 className="text-center mt-20">Loading...</h1>;
+
+    }
+    const restaurantRatings = ratings;
 
     const averageRating =
         restaurantRatings.length > 0
@@ -60,14 +85,10 @@ function RestaurantDetails() {
                         {restaurant.name}
                     </h1>
 
-                    <p className="mt-3 text-orange-600 text-lg">
-                        ⭐ {restaurant.rating}
-                    </p>
-
                     <div className="mt-4">
 
                         <p className="text-lg font-semibold">
-                            Customer Rating
+                            Customer Rating :
                         </p>
 
                         <p className="text-orange-600 text-xl mt-2">
@@ -107,7 +128,7 @@ function RestaurantDetails() {
                         </h2>
 
                         <p className="mt-3 text-gray-600">
-                            {restaurant.openingTime} - {restaurant.closingTime}                        </p>
+                            {restaurant.opening_time} - {restaurant.closing_time}                        </p>
 
                     </div>
 
@@ -141,6 +162,9 @@ function RestaurantDetails() {
                                                     {"⭐".repeat(item.rating)}
                                                 </p>
 
+                                                <p className="font-semibold text-gray-800 mt-2">
+                                                    {item.full_name}
+                                                </p>
 
                                                 {
                                                     item.comment && (
@@ -166,13 +190,13 @@ function RestaurantDetails() {
 
                     </div>
 
-                        {user?.role !== "admin" && (
-                    <Link
-                        to={`/restaurant/${restaurant.id}/reserve`}
-                        className="block mt-10 w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-4 rounded-lg transition duration-300"
-                    >
-                        Reserve Table
-                    </Link>
+                    {user?.role !== "admin" && (
+                        <Link
+                            to={`/restaurant/${restaurant.id}/reserve`}
+                            className="block mt-10 w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-4 rounded-lg transition duration-300"
+                        >
+                            Reserve Table
+                        </Link>
                     )}
 
                 </div>
