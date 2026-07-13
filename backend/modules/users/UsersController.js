@@ -1,4 +1,11 @@
-import { getAllUsers, getUserById, createAUser, updateUser, deleteUser } from "./UsersService.js";
+import {
+    getAllUsers,
+    getUserById,
+    createAUser,
+    updateUser,
+    deleteUser,
+    loginUser
+} from "./UsersService.js";
 
 export async function getUsers(req, res) {
 
@@ -143,6 +150,52 @@ export async function removeUser(req, res) {
         res.status(500).json({
 
             message: "Failed to delete user"
+
+        });
+
+    }
+
+}
+
+export async function login(req, res) {
+
+    try {
+
+        const {
+
+            username,
+            password
+
+        } = req.body;
+
+        const user = await loginUser(
+
+            username,
+            password
+
+        );
+
+        if (!user) {
+
+            return res.status(401).json({
+
+                message: "Invalid username or password"
+
+            });
+
+        }
+
+        res.json(user);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            message: "Login failed"
 
         });
 

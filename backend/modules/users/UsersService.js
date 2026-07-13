@@ -137,6 +137,29 @@ export async function deleteUser(id) {
 
 }
 
+export async function loginUser(username, password) {
+
+    const user = await sql`
+
+        SELECT
+            id,
+            full_name,
+            username,
+            email,
+            role
+        FROM users
+
+        WHERE
+            username = ${username}
+        AND
+            password = ${password};
+
+    `;
+
+    return user[0];
+
+}
+
 
 
 // import { sql } from "../../config/db.js";

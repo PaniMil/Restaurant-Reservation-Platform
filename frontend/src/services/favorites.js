@@ -44,25 +44,28 @@ export async function addFavorite(userId, restaurantId) {
 
 export async function removeFavorite(userId, restaurantId) {
 
-    const response = await fetch(
-        `${API_URL}/favorites`,
-        {
+    const response = await fetch(`${API_URL}/favorites`, {
 
-            method: "DELETE",
+        method: "DELETE",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-            body: JSON.stringify({
+        body: JSON.stringify({
 
-                user_id: userId,
-                restaurant_id: restaurantId
+            user_id: userId,
+            restaurant_id: restaurantId
 
-            })
+        })
 
-        }
-    );
+    });
+
+    if (!response.ok) {
+
+        throw new Error("Failed to remove favorite");
+
+    }
 
     return await response.json();
 
