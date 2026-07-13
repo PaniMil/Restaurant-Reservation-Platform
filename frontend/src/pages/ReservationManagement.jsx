@@ -1,27 +1,49 @@
 import { useState } from "react";
 import { getRestaurants } from "../services/restaurants";
-import { getReservations, cancelReservation } from "../services/reservation";
+import { getReservations, updateReservation } from "../services/reservation";
 import ReservationCard from "../components/ReservationCard";
 
 function ReservationManagement() {
 
-    const [reservations, setReservations] = useState(getReservations());
+    // const [reservations, setReservations] = useState(getReservations());
 
     const restaurants = getRestaurants();
 
-    function handleCancel(id) {
+    const [reservations, setReservations] = useState([]);
+
+    useEffect(() => {
+        loadReservations();
+    }, []);
+
+    async function handleCancel(reservation) {
 
         const confirmDelete = window.confirm(
             "Cancel this reservation?"
         );
 
-        if (!confirmDelete) {
-            return;
+        if (!confirmDelete) return;
+
+        try {
+
+            await updateReservation(reservation.id, {
+
+                ...reservation,
+                status: "cancelled"
+
+            });
+
+            const updatedReservations =
+                await getReservations();
+
+            setReservations(updatedReservations);
+
         }
 
-        cancelReservation(id);
+        catch (err) {
 
-        setReservations(getReservations());
+            alert(err.message);
+
+        }
 
     }
 
@@ -30,7 +52,7 @@ function ReservationManagement() {
         const now = new Date();
 
         const reservationDate = new Date(
-            `${reservation.date}T${reservation.endTime}`
+            `${reservation.reservation_date}T${reservation.end_time}`
         );
 
         if (reservation.cancelled) {
@@ -87,7 +109,7 @@ function ReservationManagement() {
 
                             (restaurant) =>
 
-                                restaurant.id === reservation.restaurantId
+                                restaurant.id === reservation.restaurant_id
 
                         );
 
@@ -109,7 +131,7 @@ function ReservationManagement() {
 
                                     <button
 
-                                        onClick={() => handleCancel(reservation.id)}
+                                        onClick={() => handleCancel(reservation)}
 
                                         className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg"
 

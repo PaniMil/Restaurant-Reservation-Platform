@@ -21,6 +21,8 @@ function Profile() {
         return null;
     }
 
+    console.log(user);
+
     return (
 
         <div className="min-h-screen bg-orange-50 py-10 px-6">
@@ -49,7 +51,7 @@ function Profile() {
                         </p>
 
                         <h2 className="text-xl font-semibold">
-                            {user.fullName}
+                            {user.full_name}
                         </h2>
                     </div>
 
@@ -69,7 +71,7 @@ function Profile() {
                         </p>
 
                         <h2 className="text-xl font-semibold">
-                            {user.createdAt}
+                            {user.created_at}
                         </h2>
                     </div>
 

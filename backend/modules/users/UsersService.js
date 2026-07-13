@@ -146,7 +146,8 @@ export async function loginUser(username, password) {
             full_name,
             username,
             email,
-            role
+            role,
+            created_at
         FROM users
 
         WHERE

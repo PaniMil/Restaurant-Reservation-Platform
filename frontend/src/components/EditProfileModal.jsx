@@ -1,56 +1,43 @@
 import { useState } from "react";
+import { updateUser } from "../services/users";
 import { updateCurrentUser } from "../services/auth";
-import { getUsers, saveUsers } from "../services/users";
 
 function EditProfileModal({ user, onClose }) {
 
-    const [fullName, setFullName] = useState(user.fullName);
+    const [fullName, setFullName] = useState(user.full_Name);
 
     const [username, setUsername] = useState(user.username);
 
     const [email, setEmail] = useState(user.email);
 
-    function handleSave() {
+    async function handleSave() {
 
-        const updatedUser = {
+        try {
 
-            ...user,
+            const updatedUser = await updateUser(user.id, {
 
-            fullName,
+                full_name: fullName,
+                username,
+                email,
+                password: user.password
 
-            username,
+            });
 
-            email
+            updateCurrentUser(updatedUser);
 
-        };
+            alert("Profile updated!");
 
+            onClose();
 
-        const users = getUsers();
+        }
 
+        catch (err) {
 
-        const updatedUsers = users.map((item) => {
+            console.log(err);
 
-            if (item.id === user.id) {
+            alert("Failed to update profile.");
 
-                return updatedUser;
-
-            }
-
-            return item;
-
-        });
-
-
-        saveUsers(updatedUsers);
-
-
-        updateCurrentUser(updatedUser);
-
-
-        alert("Profile updated!");
-
-
-        onClose();
+        }
 
     }
 

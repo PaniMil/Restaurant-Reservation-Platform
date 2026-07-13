@@ -1,65 +1,205 @@
-import reservationData from "../data/reservations";
+import API_URL from "./api";
 
+export async function getReservations() {
 
-const STORAGE_KEY = "reservations";
+    const response = await fetch(`${API_URL}/reservations`);
 
-export function getReservations() {
+    if (!response.ok) {
 
-    const data = localStorage.getItem(STORAGE_KEY);
+        throw new Error("Failed to fetch reservations");
 
-    if (data) {
-        return JSON.parse(data);
     }
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(reservationData)
+    return await response.json();
+
+}
+
+export async function getRestaurantReservations(restaurantId, date) {
+
+    const response = await fetch(
+
+        `${API_URL}/reservations/restaurant?restaurantId=${restaurantId}&date=${date}`
+
     );
 
-    return reservationData;
+    if (!response.ok) {
+
+        throw new Error("Failed to fetch restaurant reservations");
+
+    }
+
+    return await response.json();
 
 }
 
-export function saveReservations(reservations) {
+export async function createReservation(reservation) {
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(reservations)
-    );
+    const response = await fetch(
 
-}
+        `${API_URL}/reservations`,
 
-export function addReservation(reservation) {
+        {
 
-    const reservations = getReservations();
+            method: "POST",
 
+            headers: {
 
-    const updatedReservations = [...reservations, reservation];
+                "Content-Type": "application/json"
 
-    saveReservations(updatedReservations);
+            },
 
-}
-
-export function cancelReservation(id) {
-
-    const reservations = getReservations();
-
-    const updatedReservations = reservations.map((reservation) => {
-
-        if (reservation.id === id) {
-
-            return {
-                ...reservation,
-                cancelled: true
-            };
+            body: JSON.stringify(reservation)
 
         }
 
-        return reservation;
+    );
 
-    });
+    const data = await response.json();
 
+    if (!response.ok) {
 
-    saveReservations(updatedReservations);
+        throw new Error(data.message);
+
+    }
+
+    return data;
 
 }
+
+export async function updateReservation(id, reservation) {
+
+    const response = await fetch(
+
+        `${API_URL}/reservations/${id}`,
+
+        {
+
+            method: "PUT",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify(reservation)
+
+        }
+
+    );
+
+    if (!response.ok) {
+
+        throw new Error("Failed to update reservation");
+
+    }
+
+    return await response.json();
+
+}
+
+export async function deleteReservation(id) {
+
+    const response = await fetch(
+
+        `${API_URL}/reservations/${id}`,
+
+        {
+
+            method: "DELETE"
+
+        }
+
+    );
+
+    if (!response.ok) {
+
+        throw new Error("Failed to delete reservation");
+
+    }
+
+    return await response.json();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import reservationData from "../data/reservations";
+
+
+// const STORAGE_KEY = "reservations";
+
+// export function getReservations() {
+
+//     const data = localStorage.getItem(STORAGE_KEY);
+
+//     if (data) {
+//         return JSON.parse(data);
+//     }
+
+//     localStorage.setItem(
+//         STORAGE_KEY,
+//         JSON.stringify(reservationData)
+//     );
+
+//     return reservationData;
+
+// }
+
+// export function saveReservations(reservations) {
+
+//     localStorage.setItem(
+//         STORAGE_KEY,
+//         JSON.stringify(reservations)
+//     );
+
+// }
+
+// export function addReservation(reservation) {
+
+//     const reservations = getReservations();
+
+
+//     const updatedReservations = [...reservations, reservation];
+
+//     saveReservations(updatedReservations);
+
+// }
+
+// export function cancelReservation(id) {
+
+//     const reservations = getReservations();
+
+//     const updatedReservations = reservations.map((reservation) => {
+
+//         if (reservation.id === id) {
+
+//             return {
+//                 ...reservation,
+//                 cancelled: true
+//             };
+
+//         }
+
+//         return reservation;
+
+//     });
+
+
+//     saveReservations(updatedReservations);
+
+// }

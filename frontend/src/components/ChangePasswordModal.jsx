@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getUsers, saveUsers } from "../services/users";
+import { updateUser } from "../services/users";
 import { updateCurrentUser } from "../services/auth";
 
 
@@ -12,8 +12,7 @@ function ChangePasswordModal({ user, onClose }) {
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
-    function handleSave() {
-
+    async function handleSave() {
 
         if (currentPassword !== user.password) {
 
@@ -51,23 +50,23 @@ function ChangePasswordModal({ user, onClose }) {
         };
 
 
-        const users = getUsers();
+        try {
 
+            const savedUser = await updateUser(user.id, updatedUser);
 
-        const updatedUsers = users.map((item) => {
+            updateCurrentUser(savedUser);
 
-            if (item.id === user.id) {
+            alert("Password changed successfully.");
 
-                return updatedUser;
+            onClose();
 
-            }
+        } catch (err) {
 
-            return item;
+            console.log(err);
 
-        });
+            alert("Failed to change password.");
 
-
-        saveUsers(updatedUsers);
+        }
 
 
         updateCurrentUser(updatedUser);

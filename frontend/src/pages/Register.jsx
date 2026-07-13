@@ -17,7 +17,7 @@ function Register({ setUser }) {
 
     const navigate = useNavigate();
 
-    function handleRegister() {
+    async function handleRegister() {
 
         if (
             !fullName ||
@@ -41,7 +41,7 @@ function Register({ setUser }) {
 
         }
 
-        const users = getUsers();
+        const users = await getUsers();
 
         const usernameExists = users.some(
             (user) => user.username === username
@@ -67,29 +67,35 @@ function Register({ setUser }) {
 
         }
 
-        const newUser = {
+        try {
 
-            id: Date.now(),
+            const createdUser = await addUser({
 
-            fullName,
+                full_name: fullName,
 
-            username,
+                username,
 
-            email,
+                email,
 
-            password,
+                password
 
-            createdAt: new Date().toLocaleDateString()
+            });
 
-        };
+            login(createdUser);
 
-        addUser(newUser);
+            setUser(createdUser);
 
-        login(newUser);
+            navigate("/");
 
-        setUser(newUser);
+        }
 
-        navigate("/");
+        catch (err) {
+
+            alert("Registration failed.");
+
+            console.log(err);
+
+        }
 
     }
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import users from "../data/users";
-import { getUsers } from "../services/users";
+// import { getUsers } from "../services/users";
 import { login } from "../services/auth";
 
 function Login({ setUser }) {
@@ -12,36 +12,39 @@ function Login({ setUser }) {
 
     const navigate = useNavigate();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
 
-        const users = getUsers();
+        try {
 
-        const user = users.find(
-            (user) =>
-                user.username === username &&
-                user.password === password
-        );
+            const user = await login(
 
-        if (!user) {
+                username,
+                password
 
-            alert("Username or password is incorrect.");
+            );
 
-            return;
-        }
+            setUser(user);
 
-        login(user);
+            if (user.role === "admin") {
 
-        setUser(user);
+                navigate("/admin");
 
-        if (user.role === "admin") {
+            }
 
-            navigate("/admin");
+            else {
 
-        } else {
+                navigate("/");
 
-            navigate("/");
+            }
 
         }
+
+        catch (err) {
+
+            alert(err.message);
+
+        }
+
     };
 
     return (

@@ -1,67 +1,131 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-// import restaurants from "../data/restaurants";
-// import reservations from "../data/reservations";
-import { getRestaurants } from "../services/restaurants";
-import { getReservations, addReservation } from "../services/reservation";// import { getReservations, saveReservations } from "../services/reservation";
+
+import { getRestaurantById } from "../services/restaurants";
+
+import {
+    createReservation,
+    getRestaurantReservations
+} from "../services/reservation";
+
 import { getCurrentUser } from "../services/auth";
 
 function Reservation() {
 
     const { id } = useParams();
 
+    const currentUser = getCurrentUser();
+
+    const [restaurant, setRestaurant] = useState(null);
+
+    const [reservations, setReservations] = useState([]);
+
     const [date, setDate] = useState("");
 
     const [startTime, setStartTime] = useState("");
+
     const [endTime, setEndTime] = useState("");
 
     const [guests, setGuests] = useState(2);
 
     const [request, setRequest] = useState("");
 
-    const restaurants = getRestaurants();
 
-    const currentUser = getCurrentUser();
 
-    const restaurant = restaurants.find(
-        (restaurant) => restaurant.id === Number(id)
-    );
+    useEffect(() => {
 
-    const reservations = getReservations();
+        loadRestaurant();
 
-    const restaurantReservations = reservations.filter((reservation) => {
+    }, [id]);
 
-        return (
 
-            reservation.restaurantId === restaurant.id &&
-            reservation.date === date
 
-        );
+    useEffect(() => {
 
-    });
+        if (restaurant && date) {
+
+            loadReservations();
+
+        }
+
+    }, [restaurant, date]);
+
+
+
+    async function loadRestaurant() {
+
+        try {
+
+            const data = await getRestaurantById(id);
+
+            setRestaurant(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+
+
+    async function loadReservations() {
+
+        try {
+
+            const data = await getRestaurantReservations(
+
+                restaurant.id,
+
+                date
+
+            );
+
+            setReservations(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+
 
     function generateTimeSlots() {
 
+        if (!restaurant) return [];
+
         const slots = [];
 
-        const interval = restaurant.reservationInterval;
+        const interval = restaurant.reservation_interval;
 
         const [openHour, openMinute] =
-            restaurant.openingTime.split(":").map(Number);
+            restaurant.opening_time.split(":").map(Number);
 
         const [closeHour, closeMinute] =
-            restaurant.closingTime.split(":").map(Number);
+            restaurant.closing_time.split(":").map(Number);
 
         const current = new Date();
 
         current.setHours(openHour);
+
         current.setMinutes(openMinute);
+
         current.setSeconds(0);
 
         const end = new Date();
 
         end.setHours(closeHour);
+
         end.setMinutes(closeMinute);
+
         end.setSeconds(0);
 
         while (current < end) {
@@ -92,85 +156,85 @@ function Reservation() {
 
     }
 
+
+
     const timeSlots = generateTimeSlots();
+
+
 
     function convertToMinutes(time) {
 
-        const [hour, minute] = time.split(":").map(Number);
+        const [hour, minute] =
+
+            time.substring(0, 5).split(":").map(Number);
 
         return hour * 60 + minute;
 
     }
 
-    ///////////////////////////////////////////////////////
+
+
     function isTimeAvailable(start, end) {
 
         const newStart = convertToMinutes(start);
 
         const newEnd = convertToMinutes(end);
 
+        return !reservations.some((reservation) => {
 
-        return !restaurantReservations.some((reservation) => {
+            const reservedStart =
 
-            const reservedStart = convertToMinutes(
-                reservation.startTime
-            );
+                convertToMinutes(reservation.start_time);
 
-            const reservedEnd = convertToMinutes(
-                reservation.endTime
-            );
+            const reservedEnd =
 
+                convertToMinutes(reservation.end_time);
 
             return (
+
                 newStart < reservedEnd &&
-                newEnd > reservedStart
+
+                newEnd > reservedStart &&
+
+                reservation.status !== "cancelled"
+
             );
 
         });
 
     }
-    ////////////////////////////////////////////////////////
+
+
 
     const endTimeOptions = timeSlots.filter((slot) => {
 
         if (!startTime) return false;
 
-
         const difference =
+
             convertToMinutes(slot) -
+
             convertToMinutes(startTime);
 
-
         if (
-            difference < restaurant.minimumReservationMinutes ||
-            difference > restaurant.maximumReservationMinutes
-        ) {
-            return false;
-        }
 
+            difference < restaurant.minimum_reservation_minutes ||
+
+            difference > restaurant.maximum_reservation_minutes
+
+        ) {
+
+            return false;
+
+        }
 
         return isTimeAvailable(startTime, slot);
 
     });
-    // const endTimeOptions = timeSlots.filter((slot) => {
 
-    //     if (!startTime) return false;
 
-    //     const difference =
-    //         convertToMinutes(slot) -
-    //         convertToMinutes(startTime);
 
-    //     return (
-
-    //         difference >= restaurant.minimumReservationMinutes &&
-
-    //         difference <= restaurant.maximumReservationMinutes
-
-    //     );
-
-    // });
-
-    function handleReservation() {
+    async function handleReservation() {
 
         if (!date || !startTime || !endTime) {
 
@@ -180,50 +244,59 @@ function Reservation() {
 
         }
 
+        try {
 
-        const newReservation = {
+            await createReservation({
 
-            id: Date.now(),
+                user_id: currentUser.id,
 
-            restaurantId: restaurant.id,
+                restaurant_id: restaurant.id,
 
-            userId: currentUser.id,
+                reservation_date: date,
 
-            username: currentUser.username,
+                start_time: startTime,
 
-            date: date,
+                end_time: endTime,
 
-            startTime: startTime,
+                guests,
 
-            endTime: endTime,
+                special_request: request,
 
-            guests: guests,
+                status: "upcoming"
 
-            request: request,
+            });
 
-            cancelled: false
+            await loadReservations();
 
-        };
+            alert("Reservation confirmed!");
 
+            setDate("");
 
-        addReservation(newReservation);
+            setStartTime("");
 
+            setEndTime("");
 
-        alert("Reservation confirmed!");
+            setGuests(2);
 
+            setRequest("");
 
-        setStartTime("");
+        }
 
-        setEndTime("");
+        catch (err) {
 
-        setGuests(2);
+            alert(err.message);
 
-        setRequest("");
-
-        setDate("");
+        }
 
     }
 
+
+
+    if (!restaurant) {
+
+        return <h1 className="text-center mt-20">Loading...</h1>;
+
+    }
     return (
 
         <div className="min-h-screen bg-orange-50 py-10 px-6">
@@ -231,15 +304,21 @@ function Reservation() {
             <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
 
                 <h1 className="text-4xl font-bold text-orange-600">
+
                     Reserve Table
+
                 </h1>
 
                 <p className="text-gray-500 mt-2">
+
                     Restaurant
+
                 </p>
 
                 <h2 className="text-2xl font-semibold">
+
                     {restaurant.name}
+
                 </h2>
 
                 <div className="mt-5">
@@ -252,7 +331,7 @@ function Reservation() {
 
                     <h3 className="text-lg font-semibold">
 
-                        {restaurant.openingTime} - {restaurant.closingTime}
+                        {restaurant.opening_time} - {restaurant.closing_time}
 
                     </h3>
 
@@ -267,8 +346,11 @@ function Reservation() {
                     </label>
 
                     <input
+
                         type="date"
+
                         value={date}
+
                         onChange={(e) => {
 
                             setDate(e.target.value);
@@ -277,11 +359,13 @@ function Reservation() {
 
                             setEndTime("");
 
-                        }} className="w-full border rounded-lg px-4 py-3"
+                        }}
+
+                        className="w-full border rounded-lg px-4 py-3"
+
                     />
 
                 </div>
-
 
                 <div className="mt-8">
 
@@ -293,37 +377,65 @@ function Reservation() {
 
                     <div className="flex flex-wrap gap-3">
 
-                        {timeSlots.map((slot) => {
+                        {
 
-                            const reserved = restaurantReservations.some(
+                            timeSlots.map((slot) => {
 
-                                (reservation) =>
+                                const reserved = reservations.some(
 
-                                    reservation.startTime === slot
+                                    reservation =>
 
-                            );
+                                        reservation.start_time.substring(0, 5) === slot &&
 
-                            return (
+                                        reservation.status !== "cancelled"
 
-                                <button
+                                );
 
-                                    key={slot}
+                                return (
 
-                                    disabled={reserved}
+                                    <button
 
-                                    onClick={() => { setStartTime(slot); setEndTime(""); }}
+                                        key={slot}
 
-                                    className={` px-4 py-2 rounded-lg border transition ${reserved ? "bg-red-100 text-red-500 cursor-not-allowed"
-                                        : startTime === slot ? "bg-orange-500 text-white"
-                                            : "bg-white hover:bg-orange-100"} `}>
+                                        disabled={reserved}
 
-                                    {slot}
+                                        onClick={() => {
 
-                                </button>
+                                            setStartTime(slot);
 
-                            );
+                                            setEndTime("");
 
-                        })}
+                                        }}
+
+                                        className={`
+
+                                    px-4 py-2 rounded-lg border transition
+
+                                    ${reserved
+
+                                                ? "bg-red-100 text-red-500 cursor-not-allowed"
+
+                                                : startTime === slot
+
+                                                    ? "bg-orange-500 text-white"
+
+                                                    : "bg-white hover:bg-orange-100"
+
+                                            }
+
+                                    `}
+
+                                    >
+
+                                        {slot}
+
+                                    </button>
+
+                                );
+
+                            })
+
+                        }
 
                     </div>
 
@@ -339,22 +451,39 @@ function Reservation() {
 
                     <div className="flex flex-wrap gap-3">
 
-                        {endTimeOptions.map((slot) => (
+                        {
 
-                            <button
+                            endTimeOptions.map((slot) => (
 
-                                key={slot}
+                                <button
 
-                                onClick={() => setEndTime(slot)}
+                                    key={slot}
 
-                                className={` px-4 py-2 rounded-lg border transition ${endTime === slot ? "bg-orange-500 text-white" : "bg-white hover:bg-orange-100"}`}
+                                    onClick={() => setEndTime(slot)}
 
-                            >
-                                {slot}
+                                    className={`
 
-                            </button>
+                                px-4 py-2 rounded-lg border transition
 
-                        ))}
+                                ${endTime === slot
+
+                                            ? "bg-orange-500 text-white"
+
+                                            : "bg-white hover:bg-orange-100"
+
+                                        }
+
+                                `}
+
+                                >
+
+                                    {slot}
+
+                                </button>
+
+                            ))
+
+                        }
 
                     </div>
 
@@ -369,12 +498,19 @@ function Reservation() {
                     </label>
 
                     <input
+
                         type="number"
+
                         min="1"
+
                         max="20"
+
                         value={guests}
+
                         onChange={(e) => setGuests(Number(e.target.value))}
+
                         className="w-full border rounded-lg px-4 py-3"
+
                     />
 
                 </div>
@@ -388,22 +524,20 @@ function Reservation() {
                     </label>
 
                     <textarea
+
                         rows="4"
+
                         value={request}
+
                         onChange={(e) => setRequest(e.target.value)}
+
                         className="w-full border rounded-lg px-4 py-3"
+
                         placeholder="Any special request..."
+
                     />
 
                 </div>
-
-                {/* <button
-                    className="mt-8 w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg transition duration-300"
-                >
-
-                    Confirm Reservation
-
-                </button> */}
 
                 <button
 
@@ -411,13 +545,19 @@ function Reservation() {
 
                     disabled={!date || !startTime || !endTime}
 
-                    className={` mt-8 w-full py-4 rounded-lg transition text-white  ${!date || !startTime || !endTime
+                    className={`
 
-                        ? "bg-gray-400 cursor-not-allowed"
+                mt-8 w-full py-4 rounded-lg text-white transition
 
-                        : "bg-orange-500 hover:bg-orange-600"
+                ${!date || !startTime || !endTime
 
-                        }`}
+                            ? "bg-gray-400 cursor-not-allowed"
+
+                            : "bg-orange-500 hover:bg-orange-600"
+
+                        }
+
+                `}
 
                 >
 

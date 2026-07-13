@@ -1,26 +1,84 @@
 // import restaurants from "../data/restaurants";
 // import reservations from "../data/reservations";
 import { getRestaurants } from "../services/restaurants";
-import { getReservations, cancelReservation } from "../services/reservation";
-import { useState } from "react";
+import {
+    getReservations,
+    updateReservation
+} from "../services/reservation";
+import { useEffect, useState } from "react";
 import RatingModal from "../components/RatingModal";
 import ReservationCard from "../components/ReservationCard";
+import { getCurrentUser } from "../services/auth";
 
 function MyReservations() {
 
     const restaurants = getRestaurants();
 
-    const [reservations, setReservations] = useState(getReservations());
+    const currentUser = getCurrentUser();
 
-    const [selectedReservation, setSelectedReservation] = useState(null);
+    const [reservations, setReservations] = useState([]);
 
-    function handleCancel(id) {
+    const [selectedReservation, setSelectedReservation] = useState([]);
 
-        cancelReservation(id);
+    useEffect(() => {
 
-        setReservations(getReservations());
+        loadReservations();
 
-        alert("Reservation cancelled.");
+    }, []);
+
+    async function loadReservations() {
+
+        try {
+
+            const data = await getReservations();
+
+            const userReservations = data.filter(
+
+                reservation => reservation.user_id === currentUser.id
+
+            );
+
+            setReservations(userReservations);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+    async function handleCancel(reservation) {
+
+        try {
+
+            await updateReservation(
+
+                reservation.id,
+
+                {
+
+                    ...reservation,
+
+                    status: "cancelled"
+
+                }
+
+            );
+
+            await loadReservations();
+
+            alert("Reservation cancelled.");
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
 
     }
 
@@ -33,12 +91,22 @@ function MyReservations() {
         const now = new Date();
 
         const reservationDate = new Date(
-            `${reservation.date}T${reservation.endTime}`
+            `${reservation.reservation_date}T${reservation.end_time}`
         );
 
-        if (reservation.cancelled) {
+        if (reservation.status === "cancelled") {
+
             return "Cancelled";
+
         }
+
+        if (reservation.status === "completed") {
+
+            return "Completed";
+
+        }
+
+        return "Upcoming";
 
         if (reservationDate < now) {
             return "Completed";
@@ -102,7 +170,7 @@ function MyReservations() {
 
                                 (restaurant) =>
 
-                                    restaurant.id === reservation.restaurantId
+                                    restaurant.id === reservation.restaurant_id
 
                             );
 
@@ -123,7 +191,7 @@ function MyReservations() {
                                     {status === "Upcoming" && (
 
                                         <button
-                                            onClick={() => handleCancel(reservation.id)}
+                                            onClick={() => handleCancel(reservation)}
                                             className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
                                         >
                                             Cancel Reservation

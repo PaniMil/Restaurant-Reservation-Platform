@@ -58,15 +58,15 @@ function AddRestaurant() {
             // rating: 0,
             image : null,
 
-            openingTime: "10:00",
+            opening_time: "10:00",
 
-            closingTime: "22:00",
+            closing_time: "22:00",
 
-            reservationInterval: 30,
+            reservation_interval: 30,
 
-            minimumReservationMinutes: 30,
+            minimum_reservation_minutes: 30,
 
-            maximumReservationMinutes: 120
+            maximum_reservation_minutes: 120
 
 
         };
