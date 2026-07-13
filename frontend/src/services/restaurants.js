@@ -1,8 +1,8 @@
-const API_URL = "http://localhost:3000/api/restaurants";
+import API_URL from "./api";
 
 export async function getRestaurants() {
 
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}/restaurants`);
 
     if (!response.ok) {
         throw new Error("Failed to fetch restaurants");
@@ -14,7 +14,7 @@ export async function getRestaurants() {
 
 export async function getRestaurantById(id) {
 
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${API_URL}/restaurants/${id}`);
 
     if (!response.ok) {
         throw new Error("Failed to fetch restaurant");
@@ -26,7 +26,7 @@ export async function getRestaurantById(id) {
 
 export async function addRestaurant(restaurant) {
 
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/restaurants`, {
 
         method: "POST",
 
@@ -48,7 +48,7 @@ export async function addRestaurant(restaurant) {
 
 export async function updateRestaurant(id, restaurant) {
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/restaurants/${id}`, {
 
         method: "PUT",
 
@@ -70,7 +70,7 @@ export async function updateRestaurant(id, restaurant) {
 
 export async function deleteRestaurant(id) {
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/restaurants/${id}`, {
 
         method: "DELETE"
 

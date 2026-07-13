@@ -1,10 +1,8 @@
-const API_URL = "http://localhost:3000/api/ratings";
+import API_URL from "./api";
 
 export async function getRatings(restaurantId) {
 
-    const response = await fetch(
-        `${API_URL}/restaurant/${restaurantId}`
-    );
+    const response = await fetch(`${API_URL}/ratings/restaurant/${restaurantId}`);
 
     if (!response.ok) {
         throw new Error("Failed to fetch ratings");
@@ -16,7 +14,7 @@ export async function getRatings(restaurantId) {
 
 export async function addRating(rating) {
 
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/ratings`, {
 
         method: "POST",
 
@@ -34,7 +32,7 @@ export async function addRating(rating) {
 
 export async function updateRating(id, rating) {
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/ratings/${id}`, {
 
         method: "PUT",
 
@@ -52,7 +50,7 @@ export async function updateRating(id, rating) {
 
 export async function deleteRating(id) {
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/ratings/${id}`, {
 
         method: "DELETE"
 

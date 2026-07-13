@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
 // import restaurants from "../data/restaurants";
 import { getRestaurants } from "../services/restaurants";
-import { getFavorites, saveFavorites } from "../services/favorites";
+import { getFavorites, addFavorite, removeFavorite } from "../services/favorites";
+import { getCurrentUser } from "../services/auth";
 
 function Home() {
 
@@ -19,7 +20,9 @@ function Home() {
         "Healthy",
     ];
 
-    const [favorites, setFavorites] = useState(getFavorites);
+    const user = getCurrentUser();
+
+    const [favorites, setFavorites] = useState([]);
 
     const [category, setCategory] = useState("All");
 
@@ -29,13 +32,93 @@ function Home() {
         r.name.toLowerCase().includes(search.toLowerCase())
     ).filter((r) => category === "All" ? true : r.category === category);
 
-    const toggleFavorite = (id) => {
-        if (favorites.includes(id)) {
-            setFavorites(favorites.filter((item) => item !== id));
-        } else {
-            setFavorites([...favorites, id]);
+    const toggleFavorite = async (restaurantId) => {
+
+        if (!user) return;
+
+        try {
+
+            const exists = favorites.some(
+                restaurant => restaurant.id === restaurantId
+            );
+
+            if (exists) {
+
+                await removeFavorite(
+                    user.id,
+                    restaurantId
+                );
+
+                setFavorites(
+                    favorites.filter(
+                        restaurant => restaurant.id !== restaurantId
+                    )
+                );
+
+            }
+
+            else {
+
+                await addFavorite(
+                    user.id,
+                    restaurantId
+                );
+
+                const data =
+                    await getFavorites(user.id);
+
+                setFavorites(data);
+
+            }
+
         }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
     };
+    // const toggleFavorite = (id) => {
+    //     if (
+    //         favorites.some(
+    //             (favorite) => favorite.id === id
+    //         )
+    //     ) {
+    //         setFavorites(favorites.filter(
+    //             (item) => item.id !== id
+    //         ));
+    //     } else {
+    //         setFavorites([...favorites, id]);
+    //     }
+    // };
+
+    useEffect(() => {
+
+        async function loadFavorites() {
+
+            if (!user) return;
+
+            try {
+
+                const data = await getFavorites(user.id);
+
+                setFavorites(data);
+
+            }
+
+            catch (err) {
+
+                console.log(err);
+
+            }
+
+        }
+
+        loadFavorites();
+
+    }, [user]);
 
     useEffect(() => {
 
@@ -61,9 +144,9 @@ function Home() {
 
     }, []);
 
-    useEffect(() => {
-        saveFavorites(favorites);
-    }, [favorites]);
+    // useEffect(() => {
+    //     saveFavorites(favorites);
+    // }, [favorites]);
 
     return (
         <div className="min-h-screen bg-orange-50 flex flex-col items-center pt-20 px-10">
@@ -149,8 +232,7 @@ function Home() {
                             category={restaurant.category}
                             city={restaurant.city}
                             tables={restaurant.tables}
-
-                            favorite={favorites.includes(restaurant.id)}
+                            favorite={favorites.some((favorite) => favorite.id === restaurant.id)}
                             onFavorite={() => toggleFavorite(restaurant.id)}
                         />
                     ))) : (

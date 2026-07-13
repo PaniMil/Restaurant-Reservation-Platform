@@ -11,12 +11,14 @@ import {
 
 const router = express.Router();
 
-router.get("/user/:userId", getFavorites);
-
 router.get("/check", isFavorite);
+
+router.get("/:userId", getFavorites);
 
 router.post("/", addFavorite);
 
+// router.delete("/:id", removeFavorite);
 router.delete("/", removeFavorite);
+
 
 export default router;
