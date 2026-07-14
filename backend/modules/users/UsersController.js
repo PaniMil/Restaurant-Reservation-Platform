@@ -4,7 +4,8 @@ import {
     createAUser,
     updateUser,
     deleteUser,
-    loginUser
+    loginUser,
+    changePassword
 } from "./UsersService.js";
 
 export async function getUsers(req, res) {
@@ -196,6 +197,71 @@ export async function login(req, res) {
         res.status(500).json({
 
             message: "Login failed"
+
+        });
+
+    }
+
+}
+
+export async function editPassword(req, res) {
+
+    try {
+
+        const { id } = req.params;
+
+        const {
+
+            currentPassword,
+            newPassword
+
+        } = req.body;
+
+        const result = await changePassword(
+
+            id,
+
+            currentPassword,
+
+            newPassword
+
+        );
+
+        if (result === null) {
+
+            return res.status(404).json({
+
+                message: "User not found"
+
+            });
+
+        }
+
+        if (result === false) {
+
+            return res.status(400).json({
+
+                message: "Current password is incorrect"
+
+            });
+
+        }
+
+        res.json({
+
+            message: "Password updated successfully"
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            message: "Failed to update password"
 
         });
 

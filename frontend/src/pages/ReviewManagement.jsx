@@ -1,112 +1,172 @@
-import { useState } from "react";
-import { getRatings, deleteRating } from "../services/rating";
+import { useEffect, useState } from "react";
+
+import {
+    getAllRatings,
+    deleteRating
+} from "../services/rating";
+
 import { getRestaurants } from "../services/restaurants";
 
 function ReviewManagement() {
-    const [reviews, setReviews] = useState(getRatings());
 
-    const restaurants = getRestaurants();
+    const [reviews, setReviews] = useState([]);
 
-    function handleDelete(id) {
+    const [restaurants, setRestaurants] = useState([]);
 
-    const confirmDelete = window.confirm(
-        "Delete this review?"
-    );
+    useEffect(() => {
 
-    if (!confirmDelete) {
-        return;
+        loadRestaurants();
+
+        loadReviews();
+
+    }, []);
+
+    async function loadRestaurants() {
+
+    try {
+
+        const data = await getRestaurants();
+
+        setRestaurants(data);
+
     }
 
-    deleteRating(id);
+    catch (err) {
 
-    setReviews(getRatings());
+        console.log(err);
+
+    }
 
 }
 
-console.log(getRatings());
+async function loadReviews() {
 
-return (
+    try {
 
-    <div className="min-h-screen bg-orange-50 py-10 px-8">
+        const data = await getAllRatings();
 
-        <div className="max-w-5xl mx-auto">
+        setReviews(data);
 
-            <h1 className="text-4xl font-bold text-orange-600 mb-8">
+    }
 
-                Review Management
+    catch (err) {
 
-            </h1>
+        console.log(err);
 
-            <div className="space-y-6">
+    }
 
-                {reviews.map((review) => {
+}
 
-                    const restaurant = restaurants.find(
+    async function handleDelete(id) {
 
-                        (restaurant) =>
+    const confirmDelete = window.confirm(
 
-                            restaurant.id === review.restaurantId
+        "Delete this review?"
 
-                    );
+    );
 
-                    return (
+    if (!confirmDelete) return;
 
-                        <div
-                            key={review.id}
-                            className="bg-white rounded-xl shadow-md p-6 flex justify-between"
-                        >
+    try {
 
-                            <div>
+        await deleteRating(id);
 
-                                <h2 className="text-2xl font-semibold">
+        await loadReviews();
 
-                                    {restaurant?.name}
+        alert("Review deleted.");
 
-                                </h2>
+    }
 
-                                <p className="text-yellow-500 mt-2">
+    catch (err) {
 
-                                    {"⭐".repeat(review.rating)}
+        alert(err.message);
 
-                                </p>
+    }
 
-                                {review.comment && (
+}
 
-                                    <p className="text-gray-600 mt-3">
+    return (
 
-                                        {review.comment}
+        <div className="min-h-screen bg-orange-50 py-10 px-8">
+
+            <div className="max-w-5xl mx-auto">
+
+                <h1 className="text-4xl font-bold text-orange-600 mb-8">
+
+                    Review Management
+
+                </h1>
+
+                <div className="space-y-6">
+
+                    {reviews.map((review) => {
+
+                        const restaurant = restaurants.find(
+
+                            (restaurant) =>
+
+                                restaurant.id === review.restaurant_id
+
+                        );
+
+                        return (
+
+                            <div
+                                key={review.id}
+                                className="bg-white rounded-xl shadow-md p-6 flex justify-between"
+                            >
+
+                                <div>
+
+                                    <h2 className="text-2xl font-semibold">
+
+                                        {restaurant?.name}
+
+                                    </h2>
+
+                                    <p className="text-yellow-500 mt-2">
+
+                                        {"⭐".repeat(review.rating)}
 
                                     </p>
 
-                                )}
+                                    {review.comment && (
+
+                                        <p className="text-gray-600 mt-3">
+
+                                            {review.comment}
+
+                                        </p>
+
+                                    )}
+
+                                </div>
+
+                                <button
+
+                                    onClick={() => handleDelete(review.id)}
+
+                                    className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg"
+
+                                >
+
+                                    Delete
+
+                                </button>
 
                             </div>
 
-                            <button
+                        );
 
-                                onClick={() => handleDelete(review.id)}
+                    })}
 
-                                className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg"
-
-                            >
-
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    );
-
-                })}
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-);
+    );
 
 }
 export default ReviewManagement

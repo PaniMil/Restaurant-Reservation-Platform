@@ -5,36 +5,57 @@ import EditRestaurantModal from "../components/EditRestaurantModal";
 
 function ManageRestaurants() {
 
-    const [restaurants, setRestaurants] = useState(getRestaurants());
+    const [restaurants, setRestaurants] = useState([]);
 
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
     useEffect(() => {
 
-        setRestaurants(getRestaurants());
+        loadRestaurants();
 
     }, []);
 
-    function handleDelete(id) {
+    async function loadRestaurants() {
 
+        try {
+
+            const data = await getRestaurants();
+
+            setRestaurants(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+    async function handleDelete(id) {
 
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this restaurant?"
         );
 
+        if (!confirmDelete) return;
 
-        if (!confirmDelete) {
+        try {
 
-            return;
+            await deleteRestaurant(id);
+
+            await loadRestaurants();
+
+            alert("Restaurant deleted.");
 
         }
 
+        catch (err) {
 
-        deleteRestaurant(id);
+            alert(err.message);
 
-
-        setRestaurants(getRestaurants());
-
+        }
 
     }
 
@@ -143,12 +164,13 @@ function ManageRestaurants() {
                         restaurant={selectedRestaurant}
 
                         onClose={() => {
+
                             setSelectedRestaurant(null);
-                            setRestaurants(getRestaurants());
+
+                            loadRestaurants();
+
                         }}
-                        onUpdate={() =>
-                            setRestaurants(getRestaurants())
-                        }
+                        onUpdate={loadRestaurants}
 
                     />
 

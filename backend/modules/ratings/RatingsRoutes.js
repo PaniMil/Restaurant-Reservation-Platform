@@ -2,6 +2,7 @@ import express from "express";
 
 import{
 
+    getAllRatingsController,
     getRatings,
     getRating,
     addRating,
@@ -11,6 +12,8 @@ import{
 }from "./RatingsController.js";
 
 const router=express.Router();
+
+router.get("/", getAllRatingsController);
 
 router.get("/restaurant/:restaurantId",getRatings);
 

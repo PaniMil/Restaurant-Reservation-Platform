@@ -1,20 +1,45 @@
-import{
+import {
 
+    getAllRatings,
     getRestaurantRatings,
     getRatingById,
     createRating,
     updateRating,
     deleteRating
 
-}from "./RatingsService.js";
+} from "./RatingsService.js";
 
-export async function getRatings(req,res){
+export async function getAllRatingsController(req, res) {
 
-    try{
+    try {
 
-        const {restaurantId}=req.params;
+        const ratings = await getAllRatings();
 
-        const ratings=
+        res.json(ratings);
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+
+            message: "Failed to get ratings."
+
+        });
+
+    }
+
+}
+
+export async function getRatings(req, res) {
+
+    try {
+
+        const { restaurantId } = req.params;
+
+        const ratings =
             await getRestaurantRatings(
                 restaurantId
             );
@@ -23,13 +48,13 @@ export async function getRatings(req,res){
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         res.status(500).json({
 
-            message:"Failed to get ratings."
+            message: "Failed to get ratings."
 
         });
 
@@ -37,20 +62,20 @@ export async function getRatings(req,res){
 
 }
 
-export async function getRating(req,res){
+export async function getRating(req, res) {
 
-    try{
+    try {
 
-        const{id}=req.params;
+        const { id } = req.params;
 
-        const rating=
+        const rating =
             await getRatingById(id);
 
-        if(!rating){
+        if (!rating) {
 
             return res.status(404).json({
 
-                message:"Rating not found."
+                message: "Rating not found."
 
             });
 
@@ -60,13 +85,13 @@ export async function getRating(req,res){
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         res.status(500).json({
 
-            message:"Failed to get rating."
+            message: "Failed to get rating."
 
         });
 
@@ -74,24 +99,24 @@ export async function getRating(req,res){
 
 }
 
-export async function addRating(req,res){
+export async function addRating(req, res) {
 
-    try{
+    try {
 
-        const rating=
+        const rating =
             await createRating(req.body);
 
         res.status(201).json(rating);
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         res.status(500).json({
 
-            message:"Failed to create rating."
+            message: "Failed to create rating."
 
         });
 
@@ -99,23 +124,23 @@ export async function addRating(req,res){
 
 }
 
-export async function editRating(req,res){
+export async function editRating(req, res) {
 
-    try{
+    try {
 
-        const{id}=req.params;
+        const { id } = req.params;
 
-        const rating=
+        const rating =
             await updateRating(
                 id,
                 req.body
             );
 
-        if(!rating){
+        if (!rating) {
 
             return res.status(404).json({
 
-                message:"Rating not found."
+                message: "Rating not found."
 
             });
 
@@ -125,13 +150,13 @@ export async function editRating(req,res){
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         res.status(500).json({
 
-            message:"Failed to update rating."
+            message: "Failed to update rating."
 
         });
 
@@ -139,20 +164,20 @@ export async function editRating(req,res){
 
 }
 
-export async function removeRating(req,res){
+export async function removeRating(req, res) {
 
-    try{
+    try {
 
-        const{id}=req.params;
+        const { id } = req.params;
 
-        const rating=
+        const rating =
             await deleteRating(id);
 
-        if(!rating){
+        if (!rating) {
 
             return res.status(404).json({
 
-                message:"Rating not found."
+                message: "Rating not found."
 
             });
 
@@ -160,19 +185,19 @@ export async function removeRating(req,res){
 
         res.json({
 
-            message:"Rating deleted successfully."
+            message: "Rating deleted successfully."
 
         });
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         res.status(500).json({
 
-            message:"Failed to delete rating."
+            message: "Failed to delete rating."
 
         });
 

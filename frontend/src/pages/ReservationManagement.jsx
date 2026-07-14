@@ -1,19 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { getRestaurants } from "../services/restaurants";
+
 import { getReservations, updateReservation } from "../services/reservation";
+
 import ReservationCard from "../components/ReservationCard";
 
 function ReservationManagement() {
 
-    // const [reservations, setReservations] = useState(getReservations());
-
-    const restaurants = getRestaurants();
+    const [restaurants, setRestaurants] = useState([]);
 
     const [reservations, setReservations] = useState([]);
 
     useEffect(() => {
+
+        loadRestaurants();
+
         loadReservations();
+
     }, []);
+
+    async function loadRestaurants() {
+
+        try {
+
+            const data = await getRestaurants();
+
+            setRestaurants(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+    async function loadReservations() {
+
+        try {
+
+            const data = await getReservations();
+
+            setReservations(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
 
     async function handleCancel(reservation) {
 
@@ -25,17 +66,23 @@ function ReservationManagement() {
 
         try {
 
-            await updateReservation(reservation.id, {
+            await updateReservation(
 
-                ...reservation,
-                status: "cancelled"
+                reservation.id,
 
-            });
+                {
 
-            const updatedReservations =
-                await getReservations();
+                    ...reservation,
 
-            setReservations(updatedReservations);
+                    status: "cancelled"
+
+                }
+
+            );
+
+            await loadReservations();
+
+            alert("Reservation cancelled.");
 
         }
 
@@ -49,18 +96,16 @@ function ReservationManagement() {
 
     function getReservationStatus(reservation) {
 
-        const now = new Date();
+        if (reservation.status === "cancelled") {
 
-        const reservationDate = new Date(
-            `${reservation.reservation_date}T${reservation.end_time}`
-        );
-
-        if (reservation.cancelled) {
             return "Cancelled";
+
         }
 
-        if (reservationDate < now) {
+        if (reservation.status === "completed") {
+
             return "Completed";
+
         }
 
         return "Upcoming";
@@ -86,8 +131,6 @@ function ReservationManagement() {
         }
 
     }
-
-    console.log(reservations);
 
     return (
 

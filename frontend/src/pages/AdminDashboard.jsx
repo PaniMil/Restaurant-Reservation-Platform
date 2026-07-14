@@ -1,20 +1,65 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { getRestaurants } from "../services/restaurants";
 import { getUsers } from "../services/users";
 import { getReservations } from "../services/reservation";
-import { getRatings } from "../services/rating";
+import { getAllRatings } from "../services/rating";
+
 
 function AdminDashboard() {
 
-    const restaurantCount = getRestaurants().length;
+    const [restaurantCount, setRestaurantCount] = useState(0);
 
-    const userCount = getUsers().filter(
-        (user) => user.role !== "admin"
-    ).length;
+    const [userCount, setUserCount] = useState(0);
 
-    const reservationCount = getReservations().length;
+    const [reservationCount, setReservationCount] = useState(0);
 
-    const reviewCount = getRatings().length;
+    const [reviewCount, setReviewCount] = useState(0);
+
+    useEffect(() => {
+
+        loadDashboard();
+
+    }, []);
+
+    async function loadDashboard() {
+
+        try {
+
+            const restaurants = await getRestaurants();
+
+            const users = await getUsers();
+
+            const reservations = await getReservations();
+
+            const ratings = await getAllRatings();
+
+            setRestaurantCount(restaurants.length);
+
+            setUserCount(
+
+                users.filter(
+
+                    user => user.role !== "admin"
+
+                ).length
+
+            );
+
+            setReservationCount(reservations.length);
+
+            setReviewCount(ratings.length);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
 
     const cards = [
 

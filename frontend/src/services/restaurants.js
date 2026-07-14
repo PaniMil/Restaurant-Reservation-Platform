@@ -38,11 +38,13 @@ export async function addRestaurant(restaurant) {
 
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-        throw new Error("Failed to create restaurant");
+        throw new Error(data.message);
     }
 
-    return await response.json();
+    return data;
 
 }
 

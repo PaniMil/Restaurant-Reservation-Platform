@@ -6,7 +6,8 @@ import {
     createUser,
     editUser,
     removeUser,
-    login
+    login,
+    editPassword
 } from "./UsersController.js";
 
 const router = express.Router();
@@ -20,6 +21,8 @@ router.get("/:id", getUser);
 router.post("/", createUser);
 
 router.put("/:id", editUser);
+
+router.put("/:id/password", editPassword);
 
 router.delete("/:id", removeUser);
 

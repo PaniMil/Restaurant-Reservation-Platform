@@ -1,15 +1,18 @@
 import { getCurrentUser } from "../services/auth";
 import { getReservations } from "../services/reservation";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditProfileModal from "../components/EditProfileModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
+import { getFavorites } from "../services/favorites";
 
 function Profile() {
 
     const [user, setUser] = useState(getCurrentUser());
-    const reservations = getReservations();
-    const reservationCount = reservations.length;
+
+    const [reservationCount, setReservationCount] = useState(0);
+
+    const [favoriteCount, setFavoriteCount] = useState(0);
 
     const navigate = useNavigate();
 
@@ -17,11 +20,65 @@ function Profile() {
 
     const [showChangePassword, setShowChangePassword] = useState(false);
 
-    if (!user) {
-        return null;
+    useEffect(() => {
+
+        if (!user) return;
+
+        loadReservations();
+
+        loadFavorites();
+
+    }, []);
+
+    async function loadReservations() {
+
+        try {
+
+            const reservations = await getReservations();
+
+            setReservationCount(
+
+                reservations.filter(
+
+                    reservation => reservation.user_id === user.id
+
+                ).length
+
+            );
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
     }
 
-    console.log(user);
+    async function loadFavorites() {
+
+        try {
+
+            const favorites = await getFavorites(user.id);
+
+            setFavoriteCount(favorites.length);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+    if (!user) {
+
+        return null;
+
+    }
 
     return (
 
@@ -71,7 +128,7 @@ function Profile() {
                         </p>
 
                         <h2 className="text-xl font-semibold">
-                            {user.created_at}
+                            {new Date(user.created_at).toLocaleDateString()}
                         </h2>
                     </div>
 
@@ -100,7 +157,7 @@ function Profile() {
                         </button>
 
                     </div>
-
+                    {user.role !== "admin" && (
                     <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         <div
@@ -113,7 +170,7 @@ function Profile() {
                             </h3>
 
                             <p className="text-3xl font-bold mt-3">
-                                0
+                                {favoriteCount}
                             </p>
 
                         </div>
@@ -134,6 +191,7 @@ function Profile() {
                         </div>
 
                     </div>
+                    )}
 
                 </div>
 

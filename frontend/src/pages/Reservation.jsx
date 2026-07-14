@@ -236,6 +236,14 @@ function Reservation() {
 
     async function handleReservation() {
 
+        if (!currentUser) {
+
+            alert("Please login first.");
+
+            return;
+
+        }
+
         if (!date || !startTime || !endTime) {
 
             alert("Please select date, start time and end time.");

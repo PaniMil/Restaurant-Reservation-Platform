@@ -18,25 +18,28 @@ export async function getFavorites(userId) {
 
 export async function addFavorite(userId, restaurantId) {
 
-    const response = await fetch(
-        `${API_URL}/favorites`,
-        {
+    const response = await fetch(`${API_URL}/favorites`, {
 
-            method: "POST",
+        method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-            body: JSON.stringify({
+        body: JSON.stringify({
 
-                user_id: userId,
-                restaurant_id: restaurantId
+            user_id: userId,
+            restaurant_id: restaurantId
 
-            })
+        })
 
-        }
-    );
+    });
+
+    if (!response.ok) {
+
+        throw new Error("Failed to add favorite");
+
+    }
 
     return await response.json();
 

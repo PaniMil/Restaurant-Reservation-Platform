@@ -1,6 +1,47 @@
 import sql from "../../config/db.js";
 
+// export async function getAllReservations() {
+
+//     const reservations = await sql`
+
+//         SELECT *
+
+//         FROM reservations
+
+//         ORDER BY id;
+
+//     `;
+
+//     return reservations;
+
+// }
 export async function getAllReservations() {
+
+    await sql`
+
+        UPDATE reservations
+
+        SET status = 'completed'
+
+        WHERE
+
+            status = 'upcoming'
+
+            AND (
+
+                reservation_date < CURRENT_DATE
+
+                OR (
+
+                    reservation_date = CURRENT_DATE
+
+                    AND end_time < CURRENT_TIME
+
+                )
+
+            );
+
+    `;
 
     const reservations = await sql`
 

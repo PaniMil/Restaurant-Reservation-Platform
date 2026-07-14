@@ -1,5 +1,30 @@
 import sql from "../../config/db.js";
 
+export async function getAllRatings() {
+
+    const ratings = await sql`
+
+        SELECT
+            ratings.*,
+            users.full_name,
+            restaurants.name AS restaurant_name
+
+        FROM ratings
+
+        JOIN users
+        ON ratings.user_id = users.id
+
+        JOIN restaurants
+        ON ratings.restaurant_id = restaurants.id
+
+        ORDER BY ratings.created_at DESC;
+
+    `;
+
+    return ratings;
+
+}
+
 export async function getRestaurantRatings(restaurantId) {
 
     const ratings = await sql`
@@ -84,16 +109,16 @@ export async function createRating(data) {
 
 }
 
-export async function updateRating(id,data){
+export async function updateRating(id, data) {
 
-    const{
+    const {
 
         rating,
         comment
 
-    }=data;
+    } = data;
 
-    const result=await sql`
+    const result = await sql`
 
         UPDATE ratings
 
@@ -112,9 +137,9 @@ export async function updateRating(id,data){
 
 }
 
-export async function deleteRating(id){
+export async function deleteRating(id) {
 
-    const result=await sql`
+    const result = await sql`
 
         DELETE FROM ratings
 

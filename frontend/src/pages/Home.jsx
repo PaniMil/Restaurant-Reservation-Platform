@@ -4,10 +4,13 @@ import RestaurantCard from "../components/RestaurantCard";
 import { getRestaurants } from "../services/restaurants";
 import { getFavorites, addFavorite, removeFavorite } from "../services/favorites";
 import { getCurrentUser } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
 
     const [search, setSearch] = useState("");
+
+    const navigate = useNavigate();
 
     const categories = [
         "All",
@@ -34,8 +37,10 @@ function Home() {
 
     const toggleFavorite = async (restaurantId) => {
 
-        if (!user) return;
-
+        if (!user) {
+            navigate("/login")
+            return;
+        }
         try {
 
             const exists = favorites.some(
@@ -48,12 +53,9 @@ function Home() {
                     user.id,
                     restaurantId
                 );
+                const data = await getFavorites(user.id);
 
-                setFavorites(
-                    favorites.filter(
-                        restaurant => restaurant.id !== restaurantId
-                    )
-                );
+                setFavorites(data);
 
             }
 
@@ -80,19 +82,6 @@ function Home() {
         }
 
     };
-    // const toggleFavorite = (id) => {
-    //     if (
-    //         favorites.some(
-    //             (favorite) => favorite.id === id
-    //         )
-    //     ) {
-    //         setFavorites(favorites.filter(
-    //             (item) => item.id !== id
-    //         ));
-    //     } else {
-    //         setFavorites([...favorites, id]);
-    //     }
-    // };
 
     useEffect(() => {
 
@@ -144,10 +133,6 @@ function Home() {
 
     }, []);
 
-    // useEffect(() => {
-    //     saveFavorites(favorites);
-    // }, [favorites]);
-
     return (
         <div className="min-h-screen bg-orange-50 flex flex-col items-center pt-20 px-10">
             <h1 className="text-5xl font-bold text-orange-600 text-center pt-20">
@@ -175,37 +160,6 @@ function Home() {
 
             </div>
 
-            {/* <div className="mt-10 flex flex-wrap justify-center gap-4">
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🍕 Italian
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🍔 Fast Food
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    ☕ Cafe
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🍣 Japanese
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🥩 Steak
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🍰 Dessert
-                </button>
-
-                <button className="bg-white border border-orange-300 text-orange-600 px-5 py-2 rounded-full hover:bg-orange-500 hover:text-white transition duration-500">
-                    🥗 Healthy
-                </button>
-
-            </div> */}
             <div className="mt-10 flex flex-wrap justify-center gap-4">
                 {categories.map((cat) => (
                     <button

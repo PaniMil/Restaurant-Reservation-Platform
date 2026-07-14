@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { getCurrentUser } from "../services/auth";
 
 
-function RestaurantCard({ id, name, category, city, tables, favorite, onFavorite }) {
+function RestaurantCard({ id, name, category, city, tables, image, favorite, onFavorite }) {
     
     const user = getCurrentUser();
     
@@ -43,7 +43,7 @@ function RestaurantCard({ id, name, category, city, tables, favorite, onFavorite
                 </p>
 
                 <p className="text-gray-500 mt-2">
-                    {tables}
+                    {tables} tables
                 </p>
 
                 <Link

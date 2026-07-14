@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { updateUser } from "../services/users";
-import { updateCurrentUser } from "../services/auth";
-
+import { changePassword } from "../services/users";
 
 function ChangePasswordModal({ user, onClose }) {
 
@@ -11,17 +9,7 @@ function ChangePasswordModal({ user, onClose }) {
 
     const [confirmPassword, setConfirmPassword] = useState("");
 
-
     async function handleSave() {
-
-        if (currentPassword !== user.password) {
-
-            alert("Current password is incorrect.");
-
-            return;
-
-        }
-
 
         if (newPassword !== confirmPassword) {
 
@@ -31,7 +19,6 @@ function ChangePasswordModal({ user, onClose }) {
 
         }
 
-
         if (newPassword.length < 4) {
 
             alert("Password must be at least 4 characters.");
@@ -40,60 +27,45 @@ function ChangePasswordModal({ user, onClose }) {
 
         }
 
-
-        const updatedUser = {
-
-            ...user,
-
-            password: newPassword
-
-        };
-
-
         try {
 
-            const savedUser = await updateUser(user.id, updatedUser);
+            await changePassword(
 
-            updateCurrentUser(savedUser);
+                user.id,
+
+                currentPassword,
+
+                newPassword
+
+            );
 
             alert("Password changed successfully.");
 
             onClose();
 
-        } catch (err) {
+        }
+
+        catch (err) {
 
             console.log(err);
 
-            alert("Failed to change password.");
+            alert(err.message);
 
         }
 
-
-        updateCurrentUser(updatedUser);
-
-
-        alert("Password changed successfully.");
-
-
-        onClose();
-
     }
-
 
     return (
 
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 
-
             <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-
 
                 <h2 className="text-2xl font-bold text-orange-600">
 
                     Change Password
 
                 </h2>
-
 
                 <input
 
@@ -109,7 +81,6 @@ function ChangePasswordModal({ user, onClose }) {
 
                 />
 
-
                 <input
 
                     type="password"
@@ -123,7 +94,6 @@ function ChangePasswordModal({ user, onClose }) {
                     className="w-full border rounded-lg px-4 py-3 mt-5"
 
                 />
-
 
                 <input
 
@@ -139,9 +109,7 @@ function ChangePasswordModal({ user, onClose }) {
 
                 />
 
-
                 <div className="flex gap-4 mt-8">
-
 
                     <button
 
@@ -155,7 +123,6 @@ function ChangePasswordModal({ user, onClose }) {
 
                     </button>
 
-
                     <button
 
                         onClick={onClose}
@@ -168,18 +135,14 @@ function ChangePasswordModal({ user, onClose }) {
 
                     </button>
 
-
                 </div>
 
-
             </div>
-
 
         </div>
 
     );
 
 }
-
 
 export default ChangePasswordModal;

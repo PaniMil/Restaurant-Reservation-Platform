@@ -71,21 +71,21 @@ function Register({ setUser }) {
 
             const createdUser = await addUser({
 
-                full_name: fullName,
+    full_name: fullName,
+    username,
+    email,
+    password
 
-                username,
+});
 
-                email,
+const loggedUser = await login(
+    username,
+    password
+);
 
-                password
+setUser(loggedUser);
 
-            });
-
-            login(createdUser);
-
-            setUser(createdUser);
-
-            navigate("/");
+navigate("/");
 
         }
 

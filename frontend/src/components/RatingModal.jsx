@@ -23,7 +23,7 @@ function RatingModal({ reservation, onClose }) {
 
             id: Date.now(),
 
-            restaurantId: reservation.restaurantId,
+            restaurantId: reservation.restaurant_id,
 
             reservationId: reservation.id,
 

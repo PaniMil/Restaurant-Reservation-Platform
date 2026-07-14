@@ -1,30 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteUser, getUsers } from "../services/users";
 
 
 function ManageUsers() {
 
-    const [users, setUsers] = useState(getUsers());
+    const [users, setUsers] = useState([]);
 
+    useEffect(() => {
 
-    function handleDelete(id) {
+        loadUsers();
+
+    }, []);
+
+    async function loadUsers() {
+
+        try {
+
+            const data = await getUsers();
+
+            setUsers(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+    async function handleDelete(id) {
 
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this user?"
         );
 
+        if (!confirmDelete) return;
 
-        if (!confirmDelete) {
-            return;
+        try {
+
+            await deleteUser(id);
+
+            await loadUsers();
+
+            alert("User deleted.");
+
         }
 
+        catch (err) {
 
-        deleteUser(id);
+            alert(err.message);
 
-
-        setUsers(getUsers());
+        }
 
     }
+
     const normalUsers = users.filter(
         (user) => user.role !== "admin"
     );
@@ -62,7 +93,7 @@ function ManageUsers() {
 
                                 <h2 className="text-2xl font-semibold">
 
-                                    {user.fullName}
+                                    {user.full_name}
 
                                 </h2>
 

@@ -90,7 +90,6 @@ export async function updateUser(id, data) {
         full_name,
         username,
         email,
-        password
     } = data;
 
     const user = await sql`
@@ -101,8 +100,7 @@ export async function updateUser(id, data) {
 
             full_name = ${full_name},
             username = ${username},
-            email = ${email},
-            password = ${password}
+            email = ${email}
 
         WHERE id = ${id}
 
@@ -158,6 +156,44 @@ export async function loginUser(username, password) {
     `;
 
     return user[0];
+
+}
+
+export async function changePassword(id, currentPassword, newPassword) {
+
+    const user = await sql`
+
+        SELECT password
+
+        FROM users
+
+        WHERE id = ${id};
+
+    `;
+
+    if (user.length === 0) {
+
+        return null;
+
+    }
+
+    if (user[0].password !== currentPassword) {
+
+        return false;
+
+    }
+
+    await sql`
+
+        UPDATE users
+
+        SET password = ${newPassword}
+
+        WHERE id = ${id};
+
+    `;
+
+    return true;
 
 }
 

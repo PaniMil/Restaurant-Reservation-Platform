@@ -4,7 +4,7 @@ import { updateCurrentUser } from "../services/auth";
 
 function EditProfileModal({ user, onClose }) {
 
-    const [fullName, setFullName] = useState(user.full_Name);
+    const [fullName, setFullName] = useState(user.full_name);
 
     const [username, setUsername] = useState(user.username);
 
@@ -19,7 +19,6 @@ function EditProfileModal({ user, onClose }) {
                 full_name: fullName,
                 username,
                 email,
-                password: user.password
 
             });
 
@@ -33,9 +32,10 @@ function EditProfileModal({ user, onClose }) {
 
         catch (err) {
 
-            console.log(err);
+            console.error(err);
 
-            alert("Failed to update profile.");
+            // alert("Failed to update profile.");
+            alert(err.message);
 
         }
 

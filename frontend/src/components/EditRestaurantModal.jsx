@@ -23,11 +23,9 @@ function EditRestaurantModal({ restaurant, onClose, onUpdate }) {
 
 
 
-    function handleSave() {
-
+    async function handleSave() {
 
         const updatedRestaurant = {
-
 
             ...restaurant,
 
@@ -39,18 +37,29 @@ function EditRestaurantModal({ restaurant, onClose, onUpdate }) {
 
             tables: Number(tables)
 
-
         };
 
+        try {
 
-        updateRestaurant(updatedRestaurant);
+            await updateRestaurant(
 
+                restaurant.id,
 
-        onUpdate();
+                updatedRestaurant
 
+            );
 
-        onClose();
+            await onUpdate();
 
+            onClose();
+
+        }
+
+        catch (err) {
+
+            alert(err.message);
+
+        }
 
     }
 

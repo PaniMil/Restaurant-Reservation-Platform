@@ -1,30 +1,66 @@
-// import restaurants from "../data/restaurants";
-// import reservations from "../data/reservations";
-import { getRestaurants } from "../services/restaurants";
-import {
-    getReservations,
-    updateReservation
-} from "../services/reservation";
 import { useEffect, useState } from "react";
-import RatingModal from "../components/RatingModal";
-import ReservationCard from "../components/ReservationCard";
+
+import { getRestaurants } from "../services/restaurants";
+
+import {
+
+    getReservations,
+
+    updateReservation
+
+} from "../services/reservation";
+
 import { getCurrentUser } from "../services/auth";
+
+import ReservationCard from "../components/ReservationCard";
+
+import RatingModal from "../components/RatingModal";
 
 function MyReservations() {
 
-    const restaurants = getRestaurants();
-
     const currentUser = getCurrentUser();
+
+    const [restaurants, setRestaurants] = useState([]);
 
     const [reservations, setReservations] = useState([]);
 
-    const [selectedReservation, setSelectedReservation] = useState([]);
+    const [selectedReservation, setSelectedReservation] = useState(null);
+
+
 
     useEffect(() => {
+
+        loadRestaurants();
 
         loadReservations();
 
     }, []);
+
+
+
+
+
+    async function loadRestaurants() {
+
+        try {
+
+            const data = await getRestaurants();
+
+            setRestaurants(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+
+
+
+
 
     async function loadReservations() {
 
@@ -34,7 +70,9 @@ function MyReservations() {
 
             const userReservations = data.filter(
 
-                reservation => reservation.user_id === currentUser.id
+                reservation =>
+
+                    reservation.user_id === currentUser.id
 
             );
 
@@ -50,7 +88,21 @@ function MyReservations() {
 
     }
 
+
+
+
+
     async function handleCancel(reservation) {
+
+        const confirmCancel =
+
+            window.confirm(
+
+                "Cancel this reservation?"
+
+            );
+
+        if (!confirmCancel) return;
 
         try {
 
@@ -76,23 +128,27 @@ function MyReservations() {
 
         catch (err) {
 
-            console.log(err);
+            alert(err.message);
 
         }
 
     }
 
+
+
+
+
     function openRating(reservation) {
+
         setSelectedReservation(reservation);
+
     }
 
+
+
+
+
     function getReservationStatus(reservation) {
-
-        const now = new Date();
-
-        const reservationDate = new Date(
-            `${reservation.reservation_date}T${reservation.end_time}`
-        );
 
         if (reservation.status === "cancelled") {
 
@@ -108,34 +164,35 @@ function MyReservations() {
 
         return "Upcoming";
 
-        if (reservationDate < now) {
-            return "Completed";
-        }
-
-        return "Upcoming";
-
     }
+
+
+
+
 
     function getStatusColor(status) {
 
         switch (status) {
 
             case "Upcoming":
+
                 return "bg-green-100 text-green-700";
 
             case "Completed":
+
                 return "bg-blue-100 text-blue-700";
 
             case "Cancelled":
+
                 return "bg-red-100 text-red-700";
 
             default:
+
                 return "";
 
         }
 
     }
-
     return (
 
         <div className="min-h-screen bg-orange-50 py-10 px-6">
@@ -148,98 +205,158 @@ function MyReservations() {
 
                 </h1>
 
-                {reservations.length === 0 ? (
+                {
 
-                    <div className="bg-white rounded-xl shadow-md p-8 text-center">
+                    reservations.length === 0 ? (
 
-                        <p className="text-gray-500 text-lg">
+                        <div className="bg-white rounded-xl shadow-md p-8 text-center">
 
-                            You don't have any reservations yet.
+                            <p className="text-gray-500 text-lg">
 
-                        </p>
+                                You don't have any reservations yet.
 
-                    </div>
+                            </p>
 
-                ) : (
+                        </div>
 
-                    <div className="space-y-6">
+                    ) : (
 
-                        {reservations.map((reservation) => {
+                        <div className="space-y-6">
 
-                            const restaurant = restaurants.find(
+                            {
 
-                                (restaurant) =>
+                                reservations.map((reservation) => {
 
-                                    restaurant.id === reservation.restaurant_id
+                                    const restaurant = restaurants.find(
 
-                            );
+                                        restaurant =>
 
-                            const status = getReservationStatus(reservation);
+                                            restaurant.id === reservation.restaurant_id
 
-                            const statusColor = getStatusColor(status);
+                                    );
 
-                            return (
+                                    const status =
 
-                                <ReservationCard
-                                    key={reservation.id}
-                                    reservation={reservation}
-                                    restaurant={restaurant}
-                                    status={status}
-                                    statusColor={statusColor}
-                                >
+                                        getReservationStatus(reservation);
 
-                                    {status === "Upcoming" && (
+                                    const statusColor =
 
-                                        <button
-                                            onClick={() => handleCancel(reservation)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
+                                        getStatusColor(status);
+
+                                    return (
+
+                                        <ReservationCard
+
+                                            key={reservation.id}
+
+                                            reservation={reservation}
+
+                                            restaurant={restaurant}
+
+                                            status={status}
+
+                                            statusColor={statusColor}
+
                                         >
-                                            Cancel Reservation
-                                        </button>
 
-                                    )}
+                                            {
 
-                                    {status === "Completed" && (
+                                                status === "Upcoming" && (
 
-                                        <button
-                                            onClick={() => openRating(reservation)}
-                                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg transition"
-                                        >
-                                            ⭐ Rate Restaurant
-                                        </button>
+                                                    <button
 
-                                    )}
+                                                        onClick={() =>
 
-                                    {status === "Cancelled" && (
+                                                            handleCancel(reservation)
 
-                                        <p className="text-red-600 font-semibold">
-                                            Reservation Cancelled
-                                        </p>
+                                                        }
 
-                                    )}
+                                                        className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
 
-                                </ReservationCard>
+                                                    >
 
-                            );
+                                                        Cancel Reservation
 
-                        })}
+                                                    </button>
 
-                    </div>
+                                                )
 
-                )}
+                                            }
+
+                                            {
+
+                                                status === "Completed" && (
+
+                                                    <button
+
+                                                        onClick={() =>
+
+                                                            openRating(reservation)
+
+                                                        }
+
+                                                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg transition"
+
+                                                    >
+
+                                                        ⭐ Rate Restaurant
+
+                                                    </button>
+
+                                                )
+
+                                            }
+
+                                            {
+
+                                                status === "Cancelled" && (
+
+                                                    <p className="text-red-600 font-semibold">
+
+                                                        Reservation Cancelled
+
+                                                    </p>
+
+                                                )
+
+                                            }
+
+                                        </ReservationCard>
+
+                                    );
+
+                                })
+
+                            }
+
+                        </div>
+
+                    )
+
+                }
 
             </div>
 
             {
+
                 selectedReservation && (
 
                     <RatingModal
+
                         reservation={selectedReservation}
-                        onClose={() => setSelectedReservation(null)}
+
+                        onClose={() =>
+
+                            setSelectedReservation(null)
+
+                        }
+
                     />
 
                 )
+
             }
+
         </div>
 
     );

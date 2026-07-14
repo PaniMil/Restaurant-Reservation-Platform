@@ -84,6 +84,53 @@ export async function deleteUser(id) {
 
 }
 
+export async function changePassword(
+
+    id,
+
+    currentPassword,
+
+    newPassword
+
+) {
+
+    const response = await fetch(
+
+        `${API_URL}/users/${id}/password`,
+
+        {
+
+            method: "PUT",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                currentPassword,
+
+                newPassword
+
+            })
+
+        }
+
+    );
+
+    if (!response.ok) {
+
+        const error = await response.json();
+
+        throw new Error(error.message);
+
+    }
+
+    return await response.json();
+
+}
 
 
 

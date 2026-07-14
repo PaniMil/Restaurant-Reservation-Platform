@@ -21,7 +21,7 @@ function AddRestaurant() {
 
 
 
-    function handleSubmit() {
+    async function handleSubmit() {
 
 
         if (
@@ -41,9 +41,6 @@ function AddRestaurant() {
 
         const newRestaurant = {
 
-
-            id: Date.now(),
-
             name,
 
             category,
@@ -54,9 +51,7 @@ function AddRestaurant() {
 
             description,
 
-
-            // rating: 0,
-            image : null,
+            image_url: null,
 
             opening_time: "10:00",
 
@@ -73,20 +68,21 @@ function AddRestaurant() {
 
 
 
-        addRestaurant(newRestaurant);
+        try {
 
+            await addRestaurant(newRestaurant);
 
+            alert("Restaurant added!");
 
-        alert("Restaurant added!");
+            navigate("/admin/restaurants");
 
+        }
 
+        catch (err) {
 
-        // navigate("/admin/restaurants", {
-        //     state: {
-        //         refresh: true
-        //     }
-        // });
-        navigate("/admin/restaurants");
+            alert(err.message);
+
+        }
 
     }
 
