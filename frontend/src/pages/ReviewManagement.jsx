@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-
-import {
-    getAllRatings,
-    deleteRating
-} from "../services/rating";
-
+import { getAllRatings, deleteRating } from "../services/rating";
 import { getRestaurants } from "../services/restaurants";
 import ReviewCard from "../components/ReviewCard";
 

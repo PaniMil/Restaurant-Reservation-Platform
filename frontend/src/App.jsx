@@ -149,19 +149,19 @@ function App() {
 
                 <Route
 
-    path="/admin/reviews"
+                    path="/admin/reviews"
 
-    element={
+                    element={
 
-        <AdminRoute>
+                        <AdminRoute>
 
-            <ReviewManagement />
+                            <ReviewManagement />
 
-        </AdminRoute>
+                        </AdminRoute>
 
-    }
+                    }
 
-/>
+                />
 
             </Routes>
         </>

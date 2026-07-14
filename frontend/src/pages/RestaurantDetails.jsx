@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-// import restaurants from "../data/restaurants";
 import { getRestaurantById } from "../services/restaurants";
 import { Link } from "react-router-dom";
 import { getRatings } from "../services/rating";

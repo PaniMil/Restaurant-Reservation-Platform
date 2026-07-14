@@ -158,39 +158,39 @@ function Profile() {
 
                     </div>
                     {user.role !== "admin" && (
-                    <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                        <div
-                            onClick={() => navigate("/favorites")}
-                            className="bg-orange-100 rounded-xl p-6 cursor-pointer hover:bg-orange-200 transition"
-                        >
+                            <div
+                                onClick={() => navigate("/favorites")}
+                                className="bg-orange-100 rounded-xl p-6 cursor-pointer hover:bg-orange-200 transition"
+                            >
 
-                            <h3 className="text-lg font-semibold text-orange-700">
-                                Favorite Restaurants
-                            </h3>
+                                <h3 className="text-lg font-semibold text-orange-700">
+                                    Favorite Restaurants
+                                </h3>
 
-                            <p className="text-3xl font-bold mt-3">
-                                {favoriteCount}
-                            </p>
+                                <p className="text-3xl font-bold mt-3">
+                                    {favoriteCount}
+                                </p>
+
+                            </div>
+
+                            <div
+                                onClick={() => navigate("/reservations")}
+                                className="bg-blue-100 rounded-xl p-6 cursor-pointer hover:bg-blue-200 transition"
+                            >
+
+                                <h3 className="text-lg font-semibold text-blue-700">
+                                    Reservations
+                                </h3>
+
+                                <p className="text-3xl font-bold mt-3">
+                                    {reservationCount}
+                                </p>
+
+                            </div>
 
                         </div>
-
-                        <div
-                            onClick={() => navigate("/reservations")}
-                            className="bg-blue-100 rounded-xl p-6 cursor-pointer hover:bg-blue-200 transition"
-                        >
-
-                            <h3 className="text-lg font-semibold text-blue-700">
-                                Reservations
-                            </h3>
-
-                            <p className="text-3xl font-bold mt-3">
-                                {reservationCount}
-                            </p>
-
-                        </div>
-
-                    </div>
                     )}
 
                 </div>

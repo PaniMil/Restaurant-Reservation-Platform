@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-
 import { getRestaurants } from "../services/restaurants";
-
 import { getReservations, updateReservation } from "../services/reservation";
-
 import ReservationCard from "../components/ReservationCard";
 
 function ReservationManagement() {

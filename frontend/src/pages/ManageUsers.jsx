@@ -80,21 +80,21 @@ function ManageUsers() {
 
                 <div className="space-y-5">
 
-    {normalUsers.map((user) => (
+                    {normalUsers.map((user) => (
 
-        <ManageUserCard
+                        <ManageUserCard
 
-            key={user.id}
+                            key={user.id}
 
-            user={user}
+                            user={user}
 
-            onDelete={() => handleDelete(user.id)}
+                            onDelete={() => handleDelete(user.id)}
 
-        />
+                        />
 
-    ))}
+                    ))}
 
-</div>
+                </div>
 
 
             </div>

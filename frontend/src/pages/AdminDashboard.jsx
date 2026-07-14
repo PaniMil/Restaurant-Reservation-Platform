@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { getRestaurants } from "../services/restaurants";
 import { getUsers } from "../services/users";
 import { getReservations } from "../services/reservation";
 import { getAllRatings } from "../services/rating";
-
 import DashboardStatCard from "../components/DashboardStatCard";
 import DashboardMenuCard from "../components/DashboardMenuCard";
 

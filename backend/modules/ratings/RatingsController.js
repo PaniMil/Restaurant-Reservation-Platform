@@ -68,8 +68,7 @@ export async function getRating(req, res) {
 
         const { id } = req.params;
 
-        const rating =
-            await getRatingById(id);
+        const rating = await getRatingById(id);
 
         if (!rating) {
 
@@ -103,8 +102,7 @@ export async function addRating(req, res) {
 
     try {
 
-        const rating =
-            await createRating(req.body);
+        const rating = await createRating(req.body);
 
         res.status(201).json(rating);
 
@@ -170,8 +168,7 @@ export async function removeRating(req, res) {
 
         const { id } = req.params;
 
-        const rating =
-            await deleteRating(id);
+        const rating = await deleteRating(id);
 
         if (!rating) {
 

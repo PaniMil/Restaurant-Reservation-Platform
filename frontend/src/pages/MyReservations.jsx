@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
-
 import { getRestaurants } from "../services/restaurants";
-
-import {
-
-    getReservations,
-
-    updateReservation
-
-} from "../services/reservation";
-
+import { getReservations, updateReservation } from "../services/reservation";
 import { getCurrentUser } from "../services/auth";
-
 import ReservationCard from "../components/ReservationCard";
-
 import RatingModal from "../components/RatingModal";
 
 function MyReservations() {

@@ -3,9 +3,9 @@ import { getCurrentUser } from "../services/auth";
 
 
 function RestaurantCard({ id, name, category, city, tables, image_url, favorite, onFavorite }) {
-    
+
     const user = getCurrentUser();
-    
+
     return (
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
 
@@ -17,13 +17,13 @@ function RestaurantCard({ id, name, category, city, tables, image_url, favorite,
                     className="w-full h-40 object-cover"
                 />
 
-                    {user?.role !== "admin" && (
-                <button
-                    onClick={onFavorite}
-                    className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white shadow-md hover:scale-110 transition duration-300"
-                >
-                    {favorite ? "❤️" :"🤍"}
-                </button>
+                {user?.role !== "admin" && (
+                    <button
+                        onClick={onFavorite}
+                        className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white shadow-md hover:scale-110 transition duration-300"
+                    >
+                        {favorite ? "❤️" : "🤍"}
+                    </button>
                 )}
 
             </div>

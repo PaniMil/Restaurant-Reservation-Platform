@@ -24,7 +24,7 @@ function HeroSection({
             <div className="relative z-10 flex h-full flex-col items-center justify-center px-6">
 
                 <h1 className="text-6xl font-bold text-white">
-                    TableTime
+                    Reserve Table
                 </h1>
 
                 <p className="mt-5 text-2xl font-semibold text-white">

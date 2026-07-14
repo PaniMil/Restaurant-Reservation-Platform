@@ -14,7 +14,6 @@ function Home() {
 
     const navigate = useNavigate();
 
-
     const user = getCurrentUser();
 
     const [favorites, setFavorites] = useState([]);

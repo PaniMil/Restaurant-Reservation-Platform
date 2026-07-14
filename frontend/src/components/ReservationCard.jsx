@@ -35,7 +35,7 @@ function ReservationCard({
                     </div>
 
                     <p className="text-gray-600 mt-2">
-                        📅 {reservation.reservation_date}
+                        📅 {reservation.reservation_date.substring(0, 10)}
                     </p>
 
                     <p className="text-gray-600">

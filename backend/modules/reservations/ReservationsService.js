@@ -1,20 +1,5 @@
 import sql from "../../config/db.js";
 
-// export async function getAllReservations() {
-
-//     const reservations = await sql`
-
-//         SELECT *
-
-//         FROM reservations
-
-//         ORDER BY id;
-
-//     `;
-
-//     return reservations;
-
-// }
 export async function getAllReservations() {
 
     await sql`
@@ -182,56 +167,6 @@ export async function createReservation(data) {
 
 }
 
-// export async function createAReservation(data) {
-
-//     const {
-
-//         user_id,
-//         restaurant_id,
-//         reservation_date,
-//         start_time,
-//         end_time,
-//         guests,
-//         special_request,
-//         status
-
-//     } = data;
-
-//     const reservation = await sql`
-
-//         INSERT INTO reservations (
-
-//             user_id,
-//             restaurant_id,
-//             reservation_date,
-//             start_time,
-//             end_time,
-//             guests,
-//             special_request,
-//             status
-
-//         )
-
-//         VALUES (
-
-//             ${user_id},
-//             ${restaurant_id},
-//             ${reservation_date},
-//             ${start_time},
-//             ${end_time},
-//             ${guests},
-//             ${special_request},
-//             ${status}
-
-//         )
-
-//         RETURNING *;
-
-//     `;
-
-//     return reservation[0];
-
-// }
 
 export async function updateReservation(id, data) {
 

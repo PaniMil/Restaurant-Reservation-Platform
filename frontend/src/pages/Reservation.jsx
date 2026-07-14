@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { getRestaurantById } from "../services/restaurants";
-
-import {
-    createReservation,
-    getRestaurantReservations
-} from "../services/reservation";
-
+import { createReservation, ذgetRestaurantReservations } from "../services/reservation";
 import { getCurrentUser } from "../services/auth";
 
 function Reservation() {

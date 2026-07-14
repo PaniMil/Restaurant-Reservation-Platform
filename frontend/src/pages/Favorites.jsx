@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
-
 import RestaurantCard from "../components/RestaurantCard";
-
-import {
-    getFavorites,
-    removeFavorite
-} from "../services/favorites";
-
+import { getFavorites, removeFavorite } from "../services/favorites";
 import { getCurrentUser } from "../services/auth";
 
 function Favorites() {
@@ -52,21 +46,6 @@ function Favorites() {
             const data = await getFavorites(user.id);
 
             setFavorites(data);
-
-            // await removeFavorite(
-            //     user.id,
-            //     restaurant.id
-            // );
-
-            // setFavorites(
-
-            //     favorites.filter(
-
-            //         (item) => item.id !== restaurant.id
-
-            //     )
-
-            // );
 
         }
 

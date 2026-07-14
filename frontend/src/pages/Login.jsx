@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import users from "../data/users";
-// import { getUsers } from "../services/users";
 import { login } from "../services/auth";
 
 function Login({ setUser }) {
