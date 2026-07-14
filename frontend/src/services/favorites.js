@@ -73,32 +73,3 @@ export async function removeFavorite(userId, restaurantId) {
     return await response.json();
 
 }
-// export async function removeFavorite(userId) {
-
-//     const response = await fetch(
-//         `${API_URL}/favorites/${id}`,
-//         {
-
-//             method: "DELETE"
-
-//         }
-//     );
-
-//     return await response.json();
-
-// }
-
-
-
-// export function getFavorites() {
-//     const data = localStorage.getItem("favorites");
-
-//     return data ? JSON.parse(data) : [];
-// }
-
-// export function saveFavorites(favorites) {
-//     localStorage.setItem(
-//         "favorites",
-//         JSON.stringify(favorites)
-//     );
-// }

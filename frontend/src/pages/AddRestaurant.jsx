@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addRestaurant } from "../services/restaurants";
+import categories from "../data/categories";
 
 
 function AddRestaurant() {
@@ -118,13 +119,32 @@ function AddRestaurant() {
 
 
 
-                    <input
-                        type="text"
-                        placeholder="Category"
+                    <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full border rounded-lg px-4 py-3"
-                    />
+                        className="w-full border rounded-lg px-4 py-3 bg-white"
+                    >
+
+                        <option value="">
+
+                            Select Category
+
+                        </option>
+
+                        {categories.map((cat) => (
+
+                            <option
+                                key={cat}
+                                value={cat}
+                            >
+
+                                {cat}
+
+                            </option>
+
+                        ))}
+
+                    </select>
 
 
 

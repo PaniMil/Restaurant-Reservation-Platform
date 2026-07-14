@@ -6,6 +6,7 @@ import {
 } from "../services/rating";
 
 import { getRestaurants } from "../services/restaurants";
+import ReviewCard from "../components/ReviewCard";
 
 function ReviewManagement() {
 
@@ -23,67 +24,67 @@ function ReviewManagement() {
 
     async function loadRestaurants() {
 
-    try {
+        try {
 
-        const data = await getRestaurants();
+            const data = await getRestaurants();
 
-        setRestaurants(data);
+            setRestaurants(data);
 
-    }
+        }
 
-    catch (err) {
+        catch (err) {
 
-        console.log(err);
+            console.log(err);
 
-    }
-
-}
-
-async function loadReviews() {
-
-    try {
-
-        const data = await getAllRatings();
-
-        setReviews(data);
+        }
 
     }
 
-    catch (err) {
+    async function loadReviews() {
 
-        console.log(err);
+        try {
+
+            const data = await getAllRatings();
+
+            setReviews(data);
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
 
     }
-
-}
 
     async function handleDelete(id) {
 
-    const confirmDelete = window.confirm(
+        const confirmDelete = window.confirm(
 
-        "Delete this review?"
+            "Delete this review?"
 
-    );
+        );
 
-    if (!confirmDelete) return;
+        if (!confirmDelete) return;
 
-    try {
+        try {
 
-        await deleteRating(id);
+            await deleteRating(id);
 
-        await loadReviews();
+            await loadReviews();
 
-        alert("Review deleted.");
+            alert("Review deleted.");
+
+        }
+
+        catch (err) {
+
+            alert(err.message);
+
+        }
 
     }
-
-    catch (err) {
-
-        alert(err.message);
-
-    }
-
-}
 
     return (
 
@@ -103,7 +104,7 @@ async function loadReviews() {
 
                         const restaurant = restaurants.find(
 
-                            (restaurant) =>
+                            restaurant =>
 
                                 restaurant.id === review.restaurant_id
 
@@ -111,50 +112,17 @@ async function loadReviews() {
 
                         return (
 
-                            <div
+                            <ReviewCard
+
                                 key={review.id}
-                                className="bg-white rounded-xl shadow-md p-6 flex justify-between"
-                            >
 
-                                <div>
+                                review={review}
 
-                                    <h2 className="text-2xl font-semibold">
+                                restaurant={restaurant}
 
-                                        {restaurant?.name}
+                                onDelete={() => handleDelete(review.id)}
 
-                                    </h2>
-
-                                    <p className="text-yellow-500 mt-2">
-
-                                        {"⭐".repeat(review.rating)}
-
-                                    </p>
-
-                                    {review.comment && (
-
-                                        <p className="text-gray-600 mt-3">
-
-                                            {review.comment}
-
-                                        </p>
-
-                                    )}
-
-                                </div>
-
-                                <button
-
-                                    onClick={() => handleDelete(review.id)}
-
-                                    className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg"
-
-                                >
-
-                                    Delete
-
-                                </button>
-
-                            </div>
+                            />
 
                         );
 

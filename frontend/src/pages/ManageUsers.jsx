@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { deleteUser, getUsers } from "../services/users";
+import ManageUserCard from "../components/ManageUserCard";
 
 
 function ManageUsers() {
@@ -79,70 +80,21 @@ function ManageUsers() {
 
                 <div className="space-y-5">
 
+    {normalUsers.map((user) => (
 
-                    {normalUsers.map((user) => (
+        <ManageUserCard
 
+            key={user.id}
 
-                        <div
-                            key={user.id}
-                            className="bg-white rounded-xl shadow-md p-6 flex justify-between items-center"
-                        >
+            user={user}
 
+            onDelete={() => handleDelete(user.id)}
 
-                            <div>
+        />
 
-                                <h2 className="text-2xl font-semibold">
+    ))}
 
-                                    {user.full_name}
-
-                                </h2>
-
-
-                                <p className="text-gray-500 mt-2">
-
-                                    Username: {user.username}
-
-                                </p>
-
-
-                                <p className="text-gray-500">
-
-                                    Email: {user.email}
-
-                                </p>
-
-
-                                <p className="text-gray-500">
-
-                                    Role: {user.role}
-
-                                </p>
-
-
-                            </div>
-
-
-
-                            <button
-
-                                onClick={() => handleDelete(user.id)}
-
-                                className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg"
-
-                            >
-
-                                Delete
-
-                            </button>
-
-
-                        </div>
-
-
-                    ))}
-
-
-                </div>
+</div>
 
 
             </div>

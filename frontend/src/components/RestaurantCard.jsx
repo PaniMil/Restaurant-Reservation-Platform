@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { getCurrentUser } from "../services/auth";
 
 
-function RestaurantCard({ id, name, category, city, tables, image, favorite, onFavorite }) {
+function RestaurantCard({ id, name, category, city, tables, image_url, favorite, onFavorite }) {
     
     const user = getCurrentUser();
     
@@ -12,7 +12,7 @@ function RestaurantCard({ id, name, category, city, tables, image, favorite, onF
             <div className="relative">
 
                 <img
-                    src="https://placehold.co/600x400?text=Restaurant"
+                    src={image_url}
                     alt="Restaurant"
                     className="w-full h-40 object-cover"
                 />

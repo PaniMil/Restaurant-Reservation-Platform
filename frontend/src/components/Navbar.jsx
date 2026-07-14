@@ -16,8 +16,8 @@ function Navbar({ user, setUser }) {
     };
 
     return (
-        <nav className="bg-white shadow-md">
-
+        <nav className="sticky top-0 z-50 bg-white shadow-md">
+            
             <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
 
                 <Link

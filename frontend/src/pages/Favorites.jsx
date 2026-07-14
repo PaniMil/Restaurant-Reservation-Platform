@@ -130,6 +130,9 @@ function Favorites() {
 
                                         tables={restaurant.tables}
 
+                                        image_url={restaurant.image_url}
+
+
                                         favorite={true}
 
                                         onFavorite={() =>

@@ -71,11 +71,13 @@ function RestaurantDetails() {
 
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
 
-                <div className="h-72 bg-gray-300 flex items-center justify-center">
+                <div className="h-72 overflow-hidden">
 
-                    <p className="text-gray-600 text-xl">
-                        Restaurant Image
-                    </p>
+                    <img
+                        src={restaurant.image_url}
+                        alt={restaurant.name}
+                        className="w-full h-full object-cover"
+                    />
 
                 </div>
 
@@ -103,10 +105,6 @@ function RestaurantDetails() {
 
                     <p className="mt-2 text-gray-600">
                         {restaurant.category} • {restaurant.city}
-                    </p>
-
-                    <p className="mt-2 text-gray-600">
-                        {restaurant.tables} Tables Available
                     </p>
 
                     <div className="mt-8">

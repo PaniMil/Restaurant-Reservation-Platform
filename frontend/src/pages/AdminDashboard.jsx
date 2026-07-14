@@ -6,6 +6,8 @@ import { getUsers } from "../services/users";
 import { getReservations } from "../services/reservation";
 import { getAllRatings } from "../services/rating";
 
+import DashboardStatCard from "../components/DashboardStatCard";
+import DashboardMenuCard from "../components/DashboardMenuCard";
 
 function AdminDashboard() {
 
@@ -105,69 +107,37 @@ function AdminDashboard() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-10">
 
-                    <div className="bg-white rounded-xl shadow-md p-6 text-center">
+                    <DashboardStatCard
 
-                        <p className="text-gray-500">
+                        title="Restaurants"
 
-                            Restaurants
+                        value={restaurantCount}
 
-                        </p>
+                    />
 
-                        <h2 className="text-4xl font-bold text-orange-600 mt-2">
+                    <DashboardStatCard
 
-                            {restaurantCount}
+                        title="Users"
 
-                        </h2>
+                        value={userCount}
 
-                    </div>
+                    />
 
-                    <div className="bg-white rounded-xl shadow-md p-6 text-center">
+                    <DashboardStatCard
 
-                        <p className="text-gray-500">
+                        title="Reservations"
 
-                            Users
+                        value={reservationCount}
 
-                        </p>
+                    />
 
-                        <h2 className="text-4xl font-bold text-orange-600 mt-2">
+                    <DashboardStatCard
 
-                            {userCount}
+                        title="Reviews"
 
-                        </h2>
+                        value={reviewCount}
 
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-md p-6 text-center">
-
-                        <p className="text-gray-500">
-
-                            Reservations
-
-                        </p>
-
-                        <h2 className="text-4xl font-bold text-orange-600 mt-2">
-
-                            {reservationCount}
-
-                        </h2>
-
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-md p-6 text-center">
-
-                        <p className="text-gray-500">
-
-                            Reviews
-
-                        </p>
-
-                        <h2 className="text-4xl font-bold text-orange-600 mt-2">
-
-                            {reviewCount}
-
-                        </h2>
-
-                    </div>
+                    />
 
                 </div>
 
@@ -175,23 +145,15 @@ function AdminDashboard() {
 
                     {cards.map((card) => (
 
-                        <Link
+                        <DashboardMenuCard
 
                             key={card.title}
 
-                            to={card.path}
+                            title={card.title}
 
-                            className="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition"
+                            path={card.path}
 
-                        >
-
-                            <h2 className="text-2xl font-semibold text-gray-800">
-
-                                {card.title}
-
-                            </h2>
-
-                        </Link>
+                        />
 
                     ))}
 
